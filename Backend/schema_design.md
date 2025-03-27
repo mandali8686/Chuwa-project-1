@@ -16,7 +16,7 @@ Stores product details, categories, stock, and if out of stock.
 ```
 
 ## 2. Users Collection
-Stores user details
+Stores user details, cart stored in redux state
 
 ```json
 {
@@ -25,11 +25,10 @@ Stores user details
     "lastName": "string",
     "email": "string",
     "password": "string",
-    "role": "string",  // "user" or "admin"
-    "cart": [
+    "role": "string",  // "user" or "vendor",
+    "orders": [
         {
-        "productId": "ObjectId",
-        "quantity": "number"
+            "orderId": "ObjectId"  // Reference to an Order
         }
     ],
     "createdAt": "Date",
