@@ -1,22 +1,26 @@
-const jwt = require('jsonwebtoken')
+// Backend/middleware/auth.js
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
-module.exports = async (req, res, next) => {
-    const token =
-    req.header('x-auth-token') ||
-    req.headers?.authorization?.match(/^Bearer (.+)/)[1];
-
-    if (!token) {
-        return res.status(401).json({ message: 'No token, authorization denied' });
-      }
-      try {
-        // Verify token
-        const decoded = await jwt.verify(token, 'ffffffffffff');
-
-        // Add user from payload
-        req.user = decoded.user;
-
-        next();
-      } catch (err) {
-        res.status(401).json({ msg: 'Token is not valid' });
-      }
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  // Expect header format: "Bearer <token>"
+  const token = authHeader && authHeader.split(" ")[1]; // split to get token string
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Access denied. No token provided." });
+  }
+  try {
+    // Verify token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    // Attach user info to request (you can attach entire decoded payload or specific fields)
+    req.userId = decoded.userId;
+    req.userRole = decoded.role;
+    next(); // token is valid, proceed to the next handler
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token." });
+  }
 }
+
+module.exports = authMiddleware;
