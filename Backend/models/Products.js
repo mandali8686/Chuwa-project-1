@@ -12,21 +12,19 @@ const productSchema = new Schema({
     },
     price: {
         type: Number,
-        required: true,
-        min: 0
+        required: true
     },
     category: {
         type: String,
         required: true
     },
-    stock: {
-        type: Number,
-        required: true,
-        min: 0
+    stock:{
+        type:Number,
+        required: true
     },
-    outOfStock: {
-        type: Boolean,
-        default: false
+    outOfStock:{
+        type:Boolean,
+        required: true
     },
     createdAt: {
         type: Date,
@@ -38,7 +36,6 @@ const productSchema = new Schema({
     }
 });
 
-// Create Product model
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;
