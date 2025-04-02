@@ -3,13 +3,13 @@ const User = require('../models/Users');
 
 const createOrder = async (req, res) => {
     try {
-        const { userId, items, totalAmount } = req.body
-        const user = await User.findById(userId)
+        const user = await User.findOne({ email: req.user.email });
+        const { items, totalAmount } = req.body
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
         const newOrder = new Order({
-            userId,
+            userId: user._id,
             items,
             totalAmount
         });
