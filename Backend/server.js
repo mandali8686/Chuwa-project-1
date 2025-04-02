@@ -2,10 +2,18 @@ const express = require('express');
 const userRouter = require('./Routes/Users');
 const productRouter = require('./Routes/Products');
 const orderRouter = require('./Routes/Orders');
-const auth = require('./Routes/auth')
+const auth = require('./Routes/auth');
+
+const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = 5400;
+
+
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true                
+}));
 
 
 app.use(express.urlencoded({ extended: false }));
