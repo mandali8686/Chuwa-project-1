@@ -1,9 +1,13 @@
 const Product = require('../models/Products');
-
+const User = require('../models/Users');
 
 exports.createProduct = async (req, res) => {
   try {
-    
+    const user = await User.findOne({ email: req.user.email });
+    if(user.role !== 'admin') {
+      return res.status(403).json({ message: 'Permission denied' });
+    }
+
     if (!req.body.name || !req.body.price || !req.body.category) {
       return res.status(400).json({
         success: false,
@@ -21,7 +25,7 @@ exports.createProduct = async (req, res) => {
     });
 
     const savedProduct = await product.save();
-    
+
     res.status(201).json({
       success: true,
       data: savedProduct
@@ -38,6 +42,11 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
+    const user = await User.findOne({ email: req.user.email });
+    if(user.role !== 'admin') {
+      return res.status(403).json({ message: 'Permission denied' });
+    }
+
     const { id } = req.params;
     const existingProduct = await Product.findById(id);
     if (!existingProduct) {
@@ -79,10 +88,14 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
+    const user = await User.findOne({ email: req.user.email });
+    if(user.role !== 'admin') {
+      return res.status(403).json({ message: 'Permission denied' });
+    }
     const { id } = req.params;
-    
+
     const deletedProduct = await Product.findByIdAndDelete(id);
-    
+
     if (!deletedProduct) {
       return res.status(404).json({
         success: false,
@@ -125,7 +138,7 @@ exports.getAllProducts = async (req, res) => {
 exports.getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    
+
     if (!product) {
       return res.status(404).json({
         success: false,

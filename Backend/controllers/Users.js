@@ -22,6 +22,34 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+
+// [
+//     {
+//         "role": "user",
+//         "orders": [],
+//         "_id": "6753bb17c28fe39ea84d60e7",
+//         "firstName": "haha",
+//         "lastName": "lol",
+//         "email": "test@gmail.com",
+//         "posts": [],
+//         "createdAt": "2024-12-07T03:03:51.327Z",
+//         "__v": 0,
+//         "updatedAt": "2025-03-27T20:52:02.002Z"
+//     },
+//     {
+//         "_id": "67e5aea93dfd5ca1d4e91807",
+//         "firstName": "Yin",
+//         "lastName": "Fei",
+//         "email": "yinfei@example.com",
+//         "password": "12345",
+//         "role": "user",
+//         "orders": [],
+//         "createdAt": "2025-03-27T20:01:45.340Z",
+//         "updatedAt": "2025-03-27T20:01:45.340Z",
+//         "__v": 0
+//     }
+// ]
+
 const getOneUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
