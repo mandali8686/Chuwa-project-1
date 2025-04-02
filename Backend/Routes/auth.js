@@ -6,7 +6,7 @@ const User = require('../models/Users'); // Adjust the path as necessary
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
 
     // Validate input
     if (!email || !password) {
@@ -23,8 +23,7 @@ router.post('/login', async (req, res) => {
     const payload = {
       user: {
         email,
-        password,
-        role
+        password 
       },
     };
 
