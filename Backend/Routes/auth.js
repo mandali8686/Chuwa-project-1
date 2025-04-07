@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Find user by email
-    const user = await User.findOne({ email, password, role });
+    const user = await User.findOne({ email, password });
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials.' });
     }
@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
     const payload = {
       user: {
         email,
-        password 
+        password
       },
     };
 
@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(payload, 'ffffffffffff', { expiresIn: '30d' });
 
     // Send response
-    res.json({ token });
+    res.json({ token, user });
   } catch (err) {
     console.error('Error during login:', err);
     res.status(500).json({ msg: 'Server error.' });
