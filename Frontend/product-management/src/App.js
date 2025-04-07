@@ -3,11 +3,9 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 import Navbar from './components/NavBar/NavBar';
-import Navbar2 from './components/NavBar/NavBar2'
 import Products from './components/Products/Products';
 import SignIn from './components/SignIn/SignIn';
 import Signup from './components/SignUp';
-import { set } from 'mongoose';
 import { useSelector } from "react-redux";
 
 function App() {
