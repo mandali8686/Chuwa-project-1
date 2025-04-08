@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {fetchUsersAsync} from "../redux/actions/users";
 import Products from './Products/Products'
 
-const SignIn  = ({user}) => {
+const SignIn  = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState([])
