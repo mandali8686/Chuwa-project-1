@@ -10,13 +10,13 @@ router.post('/login', async (req, res) => {
 
     // Validate input
     if (!email || !password) {
-      return res.status(400).json({ msg: 'Please enter both email and password.' });
+      return res.status(400).json({ message: 'Please enter both email and password.' });
     }
 
     // Find user by email
     const user = await User.findOne({ email, password });
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials.' });
+      return res.status(400).json({ message: 'Invalid credentials.' });
     }
 
     // Create payload
@@ -33,8 +33,7 @@ router.post('/login', async (req, res) => {
     // Send response
     res.json({ token, user });
   } catch (err) {
-    console.error('Error during login:', err);
-    res.status(500).json({ msg: 'Server error.' });
+    res.status(500).json({ message: 'Server error.' });
   }
 });
 
