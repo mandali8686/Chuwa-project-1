@@ -1,5 +1,11 @@
 import { setErrorMessage } from "./errors";
 
+export const fetchCurUser = (user) => (
+  {
+    type: "FETCH_CUR_USER",
+    payload: { user}
+  }
+);
 export const selectUser = (userId) => ({
   type: "SELECT_USER",
   payload: { id: userId },
@@ -23,26 +29,37 @@ export const createUser =(user) => ({
 })
 
 
-export const fetchUsersAsync = () => async (dispatch, getState) => {
+export const fetchUsersAsync = ({ email, password }) => async (dispatch, getState) => {
   try {
     dispatch(fetchStart());
-    const res = await fetch("https://api.github.com/users");
+    const res = await fetch("http://localhost:5400/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
     if (!res.ok) {
       dispatch(fetchFail());
       const { message } = await res.json();
       throw new Error(message);
     }
+
     const data = await res.json();
-    dispatch(fetchUsers(data));
+    dispatch(fetchCurUser(data));
     dispatch(fetchSuccess());
+
+    // Add JWT token and user data to localStorage
+    localStorage.setItem("jwtToken", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
   } catch (e) {
-    console.log(e.message);
     dispatch(fetchFail());
     dispatch(setErrorMessage(e.message));
+    throw new Error(e.message)
   }
 };
-
 export const createUserAsync = (userData) => async (dispatch, getState) => {
   try {
     dispatch(fetchStart());
@@ -66,6 +83,7 @@ export const createUserAsync = (userData) => async (dispatch, getState) => {
     dispatch(setErrorMessage(""))
   } catch (e) {
     dispatch(fetchFail());  // If an error occurs, mark it as failed
-    dispatch(setErrorMessage(e.message));  // Store the error message in state
+    dispatch(setErrorMessage(e.message));
+    throw new Error(e.message)
   }
 };

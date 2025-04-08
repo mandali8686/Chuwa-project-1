@@ -12,7 +12,7 @@ export default function Signup() {
   const [error, setError] = useState("");
 
   const {
-    user: { users, user, status },
+    user: { users, cur_user, status },
     error: { message }
   } = useSelector((state) => state);
 
@@ -20,12 +20,12 @@ export default function Signup() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (cur_user) {
       navigate("/"); // Navigate to home if the user is logged in
     }
-  }, [user]);
+  }, [cur_user]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
@@ -40,9 +40,10 @@ export default function Signup() {
 
     setError("");
     try {
-      dispatch(createUserAsync({ firstName, lastName, email, password }));
+      await dispatch(createUserAsync({ firstName, lastName, email, password }));
     } catch (e) {
-      setError(e);
+      console.log(e)
+      setError(e.message);
     }
   };
 
