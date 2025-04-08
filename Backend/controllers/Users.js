@@ -64,12 +64,12 @@ const getOneUser = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
+    //const {firstName, lastName, email, password} = req.body
     try {
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) {
             return res.status(400).json({ message: 'Email already in use' });
         }
-
         const user = new User(req.body);
         await user.save();
         res.status(201).json({ message: 'User created successfully', user });

@@ -78,6 +78,7 @@ export const createUserAsync = (userData) => async (dispatch, getState) => {
     }
 
     const data = await res.json();
+    console.log(res)
     dispatch(fetchSuccess());
     dispatch(createUser(data));
     dispatch(setErrorMessage(""))

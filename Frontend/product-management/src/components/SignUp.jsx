@@ -12,8 +12,7 @@ export default function Signup() {
   const [error, setError] = useState("");
 
   const {
-    user: { users, cur_user, status },
-    error: { message }
+    user: { cur_user },
   } = useSelector((state) => state);
 
   const dispatch = useDispatch();
