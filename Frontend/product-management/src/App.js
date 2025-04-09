@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import { useEffect, useState } from 'react';
-import './App.css';
+import './index.css';
 import { Routes, Route } from "react-router-dom";
 import Navbar from './components/NavBar/NavBar';
 import Products from './components/Products/Products';
-import SignIn from './components/SignIn';
-import Signup from './components/SignUp';
+// import SignIn from './components/SignIn';
+import Signup from './components/auth/SignUp';
 import { useSelector } from "react-redux";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/signin" element={<SignIn />} />
+      {/* <Route path="/signin" element={<SignIn />} /> */}
       <Route path="/signup" element={<Signup />} />
       <Route path="/products" element={<Products />} />
       <Route exact path="/" element={<Navbar />} />
