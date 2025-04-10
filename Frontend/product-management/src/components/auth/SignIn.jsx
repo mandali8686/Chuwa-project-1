@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input, Button, Typography, Card } from 'antd';
+import { Form, Input, Button, Typography, Card, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../redux/actions/users';
+import { loginUser, clearError } from '../../features/user/index'
 import styled from '@emotion/styled';
 
 const { Title } = Typography;
@@ -18,41 +18,65 @@ const AuthContainer = styled.div`
   max-width: 400px;
   margin: 0 auto;
 `;
+const StyledForm = styled(Form)`
+width: 300px;
+.ant-form-item-label {
+  color: #333;
+}
+`;
+
+const CardContainer = styled(Card)`
+  height: 100vh;
+  background: rgba(190, 185, 185, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  box-shadow: none;
+`;
+
+const ResponsiveFooter = styled.div `
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+
+  @media (max-width: 960px) {
+  flex-direction: column;
+  }
+`;
 
 const SignIn = () => {
-  const [error, setError] = useState('');
-  const { cur_user } = useSelector((state) => state.user);
+  const { error, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   useEffect(() => {
-    if (cur_user) {
-      navigate('/products');  // Redirect to products page if user is logged in
+    if (isAuthenticated) {
+      navigate("/");
     }
-  }, [cur_user, navigate]);
+  }, [isAuthenticated]);
 
   const onFinish = async (values) => {
+    dispatch(clearError())
     const { email, password } = values;
-    try {
-      await dispatch(loginUser({ email, password }));
-      navigate('/');
-    } catch (e) {
-      setError(e.message);
-    }
+    await dispatch(loginUser({ email, password }))
+  };
+
+  const handleFieldChange = () => {
+    if (error) dispatch(clearError());
   };
 
   return (
-    <Card>
+    <CardContainer>
       <AuthContainer>
         <Title level={3}>Sign In to Your Account</Title>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <StyledForm name="signin" layout="vertical" onFinish={onFinish}>
-        <Form
-          name="signin"
-          onFinish={handleSubmit}
-          layout="vertical"
-          initialValues={{ email: '', password: '' }}
-        >
           <Form.Item
             label="Email"
             name="email"
@@ -61,7 +85,7 @@ const SignIn = () => {
               { type: 'email', message: 'Please enter a valid email!' },
             ]}
           >
-            <Input placeholder="Enter your email" />
+            <Input onChange={handleFieldChange} placeholder="Enter your email" />
           </Form.Item>
 
           <Form.Item
@@ -69,7 +93,7 @@ const SignIn = () => {
             name="password"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password placeholder="Enter your password" />
+            <Input.Password onChange={handleFieldChange} placeholder="Enter your password" />
           </Form.Item>
 
           <Form.Item>
@@ -77,15 +101,17 @@ const SignIn = () => {
               Sign In
             </Button>
           </Form.Item>
-        </Form>
+          <ResponsiveFooter>
+                <p style={{ marginRight: '0.5rem' }}>
+                  Don't have an account? <a href="/signup">Sign Up</a>
+                </p>
+                <p>
+                <a href="/signup">Forget Password?</a>
+                </p>
+          </ResponsiveFooter>
         </StyledForm>
       </AuthContainer>
-      <div style={{ textAlign: 'center' }}>
-        <p>
-          Don't have an account? <a href="/signup">Sign Up</a>
-        </p>
-      </div>
-    </Card>
+    </CardContainer>
   );
 };
 
