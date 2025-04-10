@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { Form, Input, Button, Typography, Card, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, clearError } from '../../features/user/index'
+
 import styled from '@emotion/styled';
 
 const { Title } = Typography;
@@ -71,12 +73,21 @@ const SignIn = () => {
     if (error) dispatch(clearError());
   };
 
+  const StyledForm = styled(Form)`
+  width: 300px;
+  .ant-form-item-label {
+    color: #333;
+  }
+`;
+
   return (
     <CardContainer>
       <AuthContainer>
         <Title level={3}>Sign In to Your Account</Title>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <StyledForm name="signin" layout="vertical" onFinish={onFinish}>
+
+
           <Form.Item
             label="Email"
             name="email"
