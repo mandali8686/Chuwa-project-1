@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Typography, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../redux/actions/users';
+import { loginUser } from '../../features/user/index'
 import styled from '@emotion/styled';
 
 const { Title } = Typography;

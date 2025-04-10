@@ -1,30 +1,28 @@
-
-import logo from './logo.svg';
-import { useEffect, useState } from 'react';
-import './index.css';
-import { Routes, Route } from "react-router-dom";
-import Navbar from './components/NavBar/NavBar';
+import { Routes, Route } from 'react-router-dom';
 import Products from './components/Products/Products';
-// import SignIn from './components/SignIn';
 import Signup from './components/auth/SignUp';
-import { useSelector } from "react-redux";
-
+import ProductDetails from './components/ProductDetails/ProductDetails';
+import Layout from './components/Layout'; // new
+import CreateProduct from './components/CreateProduct/CreateProduct';
+import ErrorPage from './components/ErrorPage/ErrorPage';
+import SignIn from './components/auth/SignIn';
 
 function App() {
-  const [loading, setLoading] = useState(true);
-
-  // Get the users from Redux store using useSelector
-  const { users, user, status } = useSelector((state) => state.user);
-
   return (
-
     <Routes>
-      {/* <Route path="/signin" element={<SignIn />} /> */}
+      
       <Route path="/signup" element={<Signup />} />
-      <Route path="/products" element={<Products />} />
-      <Route exact path="/" element={<Navbar />} />
-    </Routes>
+      {/* <Route path="/signin" element={<SignIn />} /> */}
 
+      
+      <Route element={<Layout />}>
+        <Route path="/products" element={<Products />} />
+        <Route path="/product-details" element={<ProductDetails />} />
+        <Route path="/" element={<Products />} />
+        <Route path="/create-product" element={<CreateProduct />} />
+        <Route path="/error" element={<ErrorPage />} />
+      </Route>
+    </Routes>
   );
 }
 
