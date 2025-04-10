@@ -76,18 +76,28 @@ const ShoppingCart = ({toggleCart}) => {
             <button className="close-button" onClick={toggleCart}>X</button>
         </CartHeader>
           <div>
-              {Object.values(CartItems).map((product, index) => {
-                  return <CartItem
-                  key={index}
-                  image={product.image || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
-                  name={product.name}
-                  price={product.price}
-                  description={product.description}
-                  category={product.category || 'Category Placeholder'}
-                  outOfStock={product.outOfStock}
-                  cartQuantity={product.cartQuantity}
-                  />
-              })}
+          {Object.values(CartItems).length > 0 ? (
+                Object.values(CartItems).map((product, index) => (
+                      <CartItem
+                        key={index}
+                        image={product.image || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
+                        name={product.name}
+                        price={product.price}
+                        description={product.description}
+                        category={product.category || 'Category Placeholder'}
+                        outOfStock={product.outOfStock}
+                        cartQuantity={product.cartQuantity}
+                      />
+                    ))
+                  ) : (
+                    <div  style={{
+                      padding: '40px 20px',
+                      textAlign: 'center',
+                      fontSize: '1.2rem',
+                      color: '#666',
+                      fontWeight: 500,
+                    }}>Empty Cart, please add items</div>
+                  )}
             </div>
           <CartFooter>
             <DiscountInput
