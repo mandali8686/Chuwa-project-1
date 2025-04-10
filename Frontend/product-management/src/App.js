@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Products from './components/Products/Products';
+
 import Signup from './components/auth/SignUp';
 import ProductDetails from './components/ProductDetails/ProductDetails';
 import Layout from './components/Layout'; // new
@@ -10,9 +11,7 @@ import SignIn from './components/auth/SignIn';
 function App() {
   return (
     <Routes>
-      
 
-      
       <Route element={<Layout />}>
 
         <Route path="/signup" element={<Signup />} />
@@ -23,6 +22,7 @@ function App() {
         <Route path="/create-product" element={<CreateProduct />} />
         <Route path="/error" element={<ErrorPage />} />
       </Route>
+
     </Routes>
   );
 }
