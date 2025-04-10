@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { clearUser } from '../../features/user';
 import './NavBar.css';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {currentUser, isAuthenticated} = useSelector(state => state.user)
+  const dispatch = useDispatch();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -16,6 +19,10 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogOut = () => {
+    dispatch(clearUser());
+    closeMobileMenu();
+  }
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -34,7 +41,7 @@ const Navbar = () => {
 
 
         <ul className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
-          <li className="nav-item">
+          {!isAuthenticated ? (<li className="nav-item">
             <NavLink
               to="/SignIn"
               className={({ isActive }) =>
@@ -44,7 +51,15 @@ const Navbar = () => {
             >
               Sign In
             </NavLink>
-          </li>
+          </li>): (<li className="nav-item">
+            <button
+             className="nav-links"
+             style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+             onClick={handleLogOut}
+            >
+             Sign Out
+            </button>
+          </li>)}
           <li className="nav-item">
             <NavLink
               to="/Cart"
