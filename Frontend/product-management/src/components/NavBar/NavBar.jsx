@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -6,7 +7,8 @@ import { clearUser } from '../../features/user';
 import './NavBar.css';
 import { useSelector } from 'react-redux';
 
-const Navbar = () => {
+
+const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {currentUser, isAuthenticated} = useSelector(state => state.user)
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
+
         <NavLink
           to="/"
           className="navbar-logo"
@@ -35,9 +38,11 @@ const Navbar = () => {
         </NavLink>
 
 
+
         <div className="mobile-menu-icon" onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
         </div>
+
 
 
         <ul className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
@@ -45,7 +50,9 @@ const Navbar = () => {
             <NavLink
               to="/SignIn"
               className={({ isActive }) =>
+
                 `nav-links ${isActive ? 'active' : ''}`
+
               }
               onClick={closeMobileMenu}
             >
@@ -64,7 +71,9 @@ const Navbar = () => {
             <NavLink
               to="/Cart"
               className={({ isActive }) =>
+
                 `nav-links ${isActive ? 'active' : ''}`
+
               }
               onClick={closeMobileMenu}
             >
@@ -77,5 +86,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;
