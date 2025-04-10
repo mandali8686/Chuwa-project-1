@@ -80,6 +80,7 @@ const ShoppingCart = ({toggleCart}) => {
                 Object.values(CartItems).map((product, index) => (
                       <CartItem
                         key={index}
+                        id= {product.id}
                         image={product.image || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
                         name={product.name}
                         price={product.price}

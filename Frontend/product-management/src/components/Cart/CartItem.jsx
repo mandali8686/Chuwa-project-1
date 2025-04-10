@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCurrentProduct } from "../../features/product/productReducer";
-// import "../Products/ProductItem.css";
-
+import { addCartItem, removeCartItem } from '../../features/cart'
 import styled from '@emotion/styled';
 
 const ProductItemContainer = styled.div`
@@ -21,8 +20,8 @@ const ProductItemContainer = styled.div`
   height: 350px;
 `;
 
-function CartItem({ image, name, price, description, cartQuantity, category,outOfStock}) {
-  const [quantity, setQuantity] = useState(1);
+function CartItem({ id, image, name, price, description, cartQuantity, category,outOfStock}) {
+  //const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -31,8 +30,16 @@ function CartItem({ image, name, price, description, cartQuantity, category,outO
     navigate("/product-details");
   };
 
-  const increment = () => setQuantity((prev) => prev + 1);
-  const decrement = () => setQuantity((prev) => Math.max(1, prev - 1));
+  const increment = () => {
+       const payload = { id, name, price, image };
+       console.log("id", id)
+       dispatch(addCartItem(payload));
+      }
+
+    const decrement = () =>{
+      const payload = { id, name, price, image };
+       dispatch(removeCartItem(payload));
+    }
 
   return (
     <ProductItemContainer onClick={handleClick}>
@@ -45,7 +52,7 @@ function CartItem({ image, name, price, description, cartQuantity, category,outO
         <div className="product-controls" onClick={(e) => e.stopPropagation()}>
           <div className="quantity-box">
             <button className="qty-btn" onClick={decrement}>−</button>
-            <span className="quantity">{quantity}</span>
+            <span className="quantity">{cartQuantity}</span>
             <button className="qty-btn" onClick={increment}>+</button>
           </div>
           <button className="edit-btn">Edit</button>

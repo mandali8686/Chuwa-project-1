@@ -6,7 +6,7 @@ import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
