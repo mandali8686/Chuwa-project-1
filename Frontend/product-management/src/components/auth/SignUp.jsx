@@ -97,7 +97,7 @@ export default function Signup() {
           </Form.Item>
           <div style={{ textAlign: 'left', width: '100%' }}>
             <p>
-              Already have an account? <Link to="./signin">Sign In</Link>
+              Already have an account? <Link to="/signin">Sign In</Link>
             </p>
         </div>
         </StyledForm>

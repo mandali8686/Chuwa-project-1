@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input, Button, Typography, Card } from 'antd';
+import { Form, Input, Button, Typography, Card } from "antd"; 
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../features/user/index'
 import styled from '@emotion/styled';
@@ -41,6 +41,13 @@ const SignIn = () => {
     }
   };
 
+  const StyledForm = styled(Form)`
+  width: 300px;
+  .ant-form-item-label {
+    color: #333;
+  }
+`;
+
   return (
     <Card>
       <AuthContainer>
@@ -49,7 +56,7 @@ const SignIn = () => {
         <StyledForm name="signin" layout="vertical" onFinish={onFinish}>
         <Form
           name="signin"
-          onFinish={handleSubmit}
+          // onFinish={handleSubmit}
           layout="vertical"
           initialValues={{ email: '', password: '' }}
         >
