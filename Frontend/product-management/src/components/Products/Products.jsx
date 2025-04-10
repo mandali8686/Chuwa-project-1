@@ -4,6 +4,7 @@ import { fetchAllProducts } from "../../features/product/productReducer";
 import ProductItem from './ProductItem';
 import './Products.css';
 import { useNavigate } from "react-router-dom";
+
 function Products() {
   const dispatch = useDispatch();
   const { list: products, loading, error } = useSelector((state) => state.product);
@@ -20,7 +21,7 @@ function Products() {
 
   return (
     <div className="products-page">
-      
+
       <div className="products-header">
         <h1>Products</h1>
         <div className="products-controls">
@@ -42,6 +43,7 @@ function Products() {
           {products.map((product, index) => (
             <ProductItem
               key={index}
+              id = {product._id}
               image={product.image || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
               name={product.name}
               price={product.price}
