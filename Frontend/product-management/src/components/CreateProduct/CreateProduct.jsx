@@ -35,10 +35,12 @@ const CreateProduct = () => {
     } catch (err) {
       console.error(err);
       message.error("Something went wrong!");
+
     }
   };
   
   return (
+
     <div className="create-product-container" style={{ maxWidth: 600, margin: "0 auto" }}>
       <Card>
         <Title level={3}>Create Product</Title>
@@ -113,6 +115,7 @@ const CreateProduct = () => {
           )}
         </Form>
       </Card>
+
     </div>
   );
 };
