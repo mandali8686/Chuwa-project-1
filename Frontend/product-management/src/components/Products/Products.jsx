@@ -27,7 +27,7 @@ function Products() {
 
   return (
     <div className="products-page">
-      
+
       <div className="products-header">
         <h1>Products</h1>
         <div className="products-controls">
