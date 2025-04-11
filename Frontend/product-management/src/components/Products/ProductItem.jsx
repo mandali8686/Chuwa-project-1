@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
+
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
+
   const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -27,6 +31,14 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
     const payload = { id, name, price, image };
      dispatch(removeCartItem(payload));
   }
+
+  useEffect(() => {
+    if (itemInCart) {
+      setQuantity(itemInCart.cartQuantity);
+    } else {
+      setQuantity(0);
+    }
+  }, [itemInCart]);
 
   return (
     <div className="product-item-container" onClick={handleClick}>

@@ -86,7 +86,7 @@ const NavBar = () => {
           </li>
         </ul>
       </div>
-        {isCartOpen && <ShoppingCart toggleCart={toggleCart} />}
+        {isCartOpen && isAuthenticated && <ShoppingCart toggleCart={toggleCart} />}
     </nav>
   );
 };
