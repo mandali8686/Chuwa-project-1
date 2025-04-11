@@ -40,6 +40,9 @@ const cartSlice = createSlice({
     }
 })
 
+export const selectQuantityById = (id) => (state) => {
+    return state.cart.CartItems[id]?.cartQuantity || 0;
+  };
 
 export const { addCartItem, removeCartItem } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;
