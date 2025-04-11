@@ -32,13 +32,13 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
      dispatch(removeCartItem(payload));
   }
 
-  useEffect(() => {
-    if (itemInCart) {
-      setQuantity(itemInCart.cartQuantity);
-    } else {
-      setQuantity(0);
-    }
-  }, [itemInCart]);
+  // useEffect(() => {
+  //   if (itemInCart) {
+  //     setQuantity(itemInCart.cartQuantity);
+  //   } else {
+  //     setQuantity(0);
+  //   }
+  // }, [itemInCart]);
 
   return (
     <div className="product-item-container" onClick={handleClick}>
