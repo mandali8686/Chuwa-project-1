@@ -86,6 +86,7 @@ export const loginUser = createAsyncThunk(
     'user/login',
     async ({ email, password }, {rejectWithValue}) => {
         try {
+          console.log('Email, password',email, password);
             const res = await fetch("http://localhost:5400/api/login", {
                 method: "POST",
                 headers: {
