@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCartItem, removeCartItem } from '../../features/cart'
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
-  const [quantity, setQuantity] = useState(0);
+  const itemInCart = useSelector(state =>
+    state.cart.CartItems[id]
+  );
+  const [quantity, setQuantity] = useState(itemInCart?.cartQuantity?? 0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,6 +29,14 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
     const payload = { id, name, price, image };
      dispatch(removeCartItem(payload));
   }
+
+  useEffect(() => {
+    if (itemInCart) {
+      setQuantity(itemInCart.cartQuantity);
+    } else {
+      setQuantity(0);
+    }
+  }, [itemInCart]);
 
   return (
     <div className="product-item-container" onClick={handleClick}>
