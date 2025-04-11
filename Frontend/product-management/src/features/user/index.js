@@ -91,6 +91,7 @@ export const loginUser = createAsyncThunk(
     'user/login',
     async ({ email, password }, {rejectWithValue}) => {
         try {
+          console.log('Email, password',email, password);
             const res = await fetch("http://localhost:5400/api/login", {
                 method: "POST",
                 headers: {
@@ -99,6 +100,7 @@ export const loginUser = createAsyncThunk(
                 body: JSON.stringify({ email, password }),
               });
             const data = await res.json();
+            console.log(data);
             return data;
         } catch(e){
             return rejectWithValue(e.message);

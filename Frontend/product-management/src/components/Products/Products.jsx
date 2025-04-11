@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../features/product/productReducer";
 import ProductItem from './ProductItem';
 import './Products.css';
 import { useNavigate } from "react-router-dom";
+import { Pagination } from "antd";
+
 function Products() {
   const dispatch = useDispatch();
   const { list: products, loading, error } = useSelector((state) => state.product);
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
 
 
   useEffect(() => {
@@ -17,6 +22,8 @@ function Products() {
   const handleAddProduct = ()=>{
     navigate('/create-product');
   }
+
+  const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="products-page">
@@ -39,10 +46,10 @@ function Products() {
         <p style={{ color: "red" }}>Error: {error}</p>
       ) : (
         <div className="product-grid">
-          {products.map((product, index) => (
+          {paginatedProducts.map((product, index) => (
             <ProductItem
               key={index}
-              image={product.image || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
+              image={product.imageUrl || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
               name={product.name}
               price={product.price}
               description={product.description}
@@ -54,13 +61,13 @@ function Products() {
       )}
 
       <div className="pagination">
-        <button disabled>«</button>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <button key={page} className={page === 1 ? "active" : ""}>
-            {page}
-          </button>
-        ))}
-        <button>»</button>
+      <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={products.length}
+              onChange={(page) => setCurrentPage(page)}
+              showSizeChanger={false}
+            />
       </div>
     </div>
   );
