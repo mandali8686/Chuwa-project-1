@@ -4,7 +4,9 @@ import { fetchAllProducts } from "../../features/product/productReducer";
 import ProductItem from './ProductItem';
 import './Products.css';
 import { useNavigate } from "react-router-dom";
-import { Pagination } from "antd";
+import { Pagination, Row, Col} from "antd";
+import SortDropdown from "./Dropdown";
+
 
 function Products() {
   const dispatch = useDispatch();
@@ -12,7 +14,7 @@ function Products() {
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 4;
+  const pageSize = 6;
 
 
   useEffect(() => {
@@ -30,12 +32,10 @@ function Products() {
 
       <div className="products-header">
         <h1>Products</h1>
+
+        
         <div className="products-controls">
-          <select>
-            <option>Last added</option>
-            <option>Price: low to high</option>
-            <option>Price: high to low</option>
-          </select>
+          <SortDropdown />
           <button className="add-btn" onClick={handleAddProduct}>Add Product</button>
         </div>
       </div>
@@ -45,19 +45,25 @@ function Products() {
       ) : error ? (
         <p style={{ color: "red" }}>Error: {error}</p>
       ) : (
-        <div className="product-grid">
-          {paginatedProducts.map((product, index) => (
+        <Row gutter={[24, 24]}>
+        {paginatedProducts.map((product, index) => (
+          <Col
+            key={index}
+            xs={24} sm={12} md={8} lg={6} xl={6}
+          >
             <ProductItem
-              key={index}
-              image={product.imageUrl || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
-              name={product.name}
-              price={product.price}
-              description={product.description}
-              category={product.category || 'Category Placeholder'}
-              outOfStock={product.outOfStock}
+            id={product._id}
+            image={product.imageUrl || 'https://cdn.pixabay.com/photo/2013/07/13/12/46/iphone-160307_1280.png'}
+            name={product.name}
+            price={product.price}
+            description={product.description}
+            category={product.category || 'Category Placeholder'}
+            outOfStock={product.outOfStock}
             />
-          ))}
-        </div>
+          </Col>
+        ))}
+      </Row>
+      
       )}
 
       <div className="pagination">

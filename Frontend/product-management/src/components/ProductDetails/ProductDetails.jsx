@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function ProductDetails() {
   const product = useSelector((state) => state.product.currentProduct);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const increment = () => setQuantity((prev) => prev + 1);
   const decrement = () => setQuantity((prev) => Math.max(1, prev - 1));
   const navigate = useNavigate();
