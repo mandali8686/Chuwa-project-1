@@ -75,6 +75,24 @@ const CheckoutButton = styled.button`
   }
 `;
 
+
+const CloseButton = styled.button`
+  background-color: rgb(109, 101, 224);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left:90%;
+  margin-top:0px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: red;
+  }
+`;
+
 const ShoppingCart = ({toggleCart}) => {
     const { CartItems, totalPrice, count } = useSelector((state) => state.cart);
     //const cartRef = useRef(null);
