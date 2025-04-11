@@ -3,53 +3,66 @@ import { useNavigate, Link } from "react-router-dom"; // Added Link import
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Input, Button, Typography, Card } from "antd"; // Added Card import
 import styled from "@emotion/styled";
-import { createUserAsync } from '../../features/user/index'
+import { createUserAsync, clearError } from '../../features/user/index'
+
+const { Title } = Typography;
+
+const AuthContainer = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 20px;
+background-color: #f7f7f7;
+border-radius: 10px;
+max-width: 400px;
+margin: 0 auto;
+`;
+
+const StyledForm = styled(Form)`
+width: 300px;
+.ant-form-item-label {
+  color: #333;
+}
+`;
+
+const CardContainer = styled(Card)`
+  background: rgba(190, 185, 185, 0.25);
+`;
+
+
+const ResponsiveFooter = styled.div `
+  textAlign: left;
+  width: 100%;
+  display: flex;
+
+  @media (max-width: 960px) {
+    justify-content: center;
+    text-align: center;
+  }
+`;
 
 export default function Signup() {
-  // const [error, setError] = useState("");
-  const {  loading, error } = useSelector((state) => state.user);
-  console.log(error)
+  const {  isAuthenticated, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { Title } = Typography;
-
-  const AuthContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 10px;
-    max-width: 400px;
-    margin: 0 auto;
-  `;
-
-  const StyledForm = styled(Form)`
-    width: 300px;
-    .ant-form-item-label {
-      color: #333;
-    }
-  `;
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const onFinish = async (values) => {
-    try {
-      let res = await dispatch(createUserAsync(values));
-      //navigate('/')
-    } catch (e) {
-      console.log("error catche: ", e)
+    dispatch(clearError())
+
+    const rsl = await dispatch(createUserAsync(values))
+    if(!rsl.error) {
+      navigate('/signin')
     }
   };
 
-  // useEffect(() => {
-  //   if (cur_user) {
-  //     navigate("/");
-  //   }
-  // }, [cur_user, navigate]);
 
   return (
-    <Card>
+    <CardContainer>
       <AuthContainer>
         <Title>Sign Up</Title>
         {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -95,13 +108,13 @@ export default function Signup() {
               Create Account
             </Button>
           </Form.Item>
-          <div style={{ textAlign: 'left', width: '100%' }}>
+          <ResponsiveFooter>
             <p>
               Already have an account? <Link to="/signin">Sign In</Link>
             </p>
-        </div>
+          </ResponsiveFooter>
         </StyledForm>
       </AuthContainer>
-    </Card>
+    </CardContainer>
   );
 }
