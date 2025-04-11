@@ -21,6 +21,7 @@ exports.createProduct = async (req, res) => {
       price: req.body.price,
       category: req.body.category,
       stock: req.body.stock || 0,
+      imageUrl: req.body.imageUrl || '',
       outOfStock: req.body.stock ? req.body.stock <= 0 : true
     });
 
@@ -62,6 +63,7 @@ exports.updateProduct = async (req, res) => {
       price: req.body.price || existingProduct.price,
       category: req.body.category || existingProduct.category,
       stock: req.body.stock !== undefined ? req.body.stock : existingProduct.stock,
+      imageUrl: req.body.imageUrl !== undefined ? req.body.imageUrl : existingProduct.imageUrl,
       updatedAt: Date.now()
     };
 

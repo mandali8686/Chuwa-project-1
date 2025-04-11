@@ -26,6 +26,10 @@ const productSchema = new Schema({
         type:Boolean,
         required: true
     },
+    imageUrl:{
+        type: String,
+        default: ''
+    },
     createdAt: {
         type: Date,
         default: Date.now
