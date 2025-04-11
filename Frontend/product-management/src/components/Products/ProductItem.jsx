@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { addCartItem, removeCartItem } from '../../features/cart'
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
-function ProductItem({ image, name, price, description, category, outOfStock }) {
-  const [quantity, setQuantity] = useState(1);
+function ProductItem({ id, image, name, price, description, category, outOfStock }) {
+  const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -14,8 +15,17 @@ function ProductItem({ image, name, price, description, category, outOfStock }) 
     navigate("/product-details");
   };
 
-  const increment = () => setQuantity((prev) => prev + 1);
-  const decrement = () => setQuantity((prev) => Math.max(1, prev - 1));
+  const increment = () => {
+     setQuantity((prev) => prev + 1)
+     const payload = { id, name, price, image };
+     dispatch(addCartItem(payload));
+    }
+
+  const decrement = () =>{
+    setQuantity((prev) => Math.max(0, prev - 1));
+    const payload = { id, name, price, image };
+     dispatch(removeCartItem(payload));
+  }
 
   return (
     <div className="product-item-container" onClick={handleClick}>

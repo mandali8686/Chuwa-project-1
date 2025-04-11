@@ -6,11 +6,18 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import { clearUser } from '../../features/user';
 import './NavBar.css';
 import { useSelector } from 'react-redux';
+import ShoppingCart from '../Cart/ShoppingCart';
 
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {currentUser, isAuthenticated} = useSelector(state => state.user)
+
+    const [isCartOpen, setIsCartOpen] = useState(false)
+    const toggleCart = () => {
+      setIsCartOpen(!isCartOpen);
+    };
+
   const dispatch = useDispatch();
 
   const toggleMobileMenu = () => {
@@ -67,25 +74,21 @@ const NavBar = () => {
              Sign Out
             </button>
           </li>)}
+
           <li className="nav-item">
-            <NavLink
-              to="/Cart"
-              className={({ isActive }) =>
-
-                `nav-links ${isActive ? 'active' : ''}`
-
-              }
-              onClick={closeMobileMenu}
+            <button
+            className="nav-links"
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            onClick ={toggleCart}
             >
-              Cart
-            </NavLink>
+            Cart
+            </button>
           </li>
-
         </ul>
       </div>
+        {isCartOpen && <ShoppingCart toggleCart={toggleCart} />}
     </nav>
   );
 };
 
 export default NavBar;
-

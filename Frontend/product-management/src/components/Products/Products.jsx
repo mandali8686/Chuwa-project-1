@@ -4,7 +4,9 @@ import { fetchAllProducts } from "../../features/product/productReducer";
 import ProductItem from './ProductItem';
 import './Products.css';
 import { useNavigate } from "react-router-dom";
+
 import { Pagination } from "antd";
+
 
 function Products() {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ function Products() {
 
   return (
     <div className="products-page">
-      
+
       <div className="products-header">
         <h1>Products</h1>
         <div className="products-controls">
