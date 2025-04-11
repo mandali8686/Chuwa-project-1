@@ -64,6 +64,24 @@ const CheckoutButton = styled.button`
   }
 `;
 
+
+const CloseButton = styled.button`
+  background-color: rgb(109, 101, 224);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left:90%;
+  margin-top:0px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: red;
+  }
+`;
+
 const ShoppingCart = ({toggleCart}) => {
     const { CartItems, totalPrice, count } = useSelector((state) => state.cart);
     //const cartRef = useRef(null);
@@ -72,8 +90,9 @@ const ShoppingCart = ({toggleCart}) => {
         <ModalBackdrop>
         <ShoppingCartContainer>
         <CartHeader>
+        <CloseButton onClick={toggleCart}>X</CloseButton>
             <span style={{ color: "white", textAlign:"start"}}>Cart</span>
-            <button className="close-button" onClick={toggleCart}>X</button>
+            
         </CartHeader>
           <div>
           {Object.values(CartItems).length > 0 ? (
