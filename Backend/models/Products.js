@@ -24,7 +24,7 @@ const productSchema = new Schema({
     },
     outOfStock:{
         type:Boolean,
-        required: true
+        default: false
     },
     imageUrl:{
         type: String,
