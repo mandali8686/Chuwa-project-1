@@ -9,8 +9,7 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
   const itemInCart = useSelector(state =>
     state.cart.CartItems[id]
   );
-  console.log("product item conponent rerendered")
-  const [quantity, setQuantity] = useState(itemInCart ? itemInCart.cartQuantity : 0);
+  const [quantity, setQuantity] = useState(itemInCart?.cartQuantity?? 0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

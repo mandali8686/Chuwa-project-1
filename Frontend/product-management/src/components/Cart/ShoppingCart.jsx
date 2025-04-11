@@ -3,12 +3,19 @@ import CartItem from './CartItem';
 import styled from '@emotion/styled';
 
 const ShoppingCartContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   @media (min-width: 768px) {
     position: fixed;
     top: 0px;
     right: 0px;
     width: 33.33vw;
     z-index: 1000;
+    background: white;
+  }
+  @media (max-width: 767px) {
+    width: 100%;
+    height: 100vh;
     background: white;
   }
 `
@@ -33,12 +40,16 @@ const CartHeader = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
+  display: flex;
+  justify-content: space-between;
 `;
 
+const ShoppingCartContent = styled.div`
+  flex-grow: 1;
+`;
 
 const CartFooter = styled.div`
   padding: 15px;
-  border-top: 1px solid #ccc;
 `;
 
 const DiscountInput = styled.input`
@@ -72,9 +83,20 @@ const ShoppingCart = ({toggleCart}) => {
         <ModalBackdrop>
         <ShoppingCartContainer>
         <CartHeader>
-            <span style={{ color: "white", textAlign:"start"}}>Cart</span>
-            <button className="close-button" onClick={toggleCart}>X</button>
+        <div style={{ display: "flex", alignItems: "center", color: "white" }}>
+          <span style={{ fontSize: "1.5rem" }}>Cart</span>
+          <span style={{ fontSize: "1rem", marginLeft: "0.4rem" }}>{count>0 && `(${count})`}</span>
+        </div>
+            <button style={{
+                border: "none",
+                background: "none",
+                fontSize: "1.5rem",
+                color: "white",
+                cursor: "pointer"
+              }}
+          className="close-button" onClick={toggleCart}>X</button>
         </CartHeader>
+        <ShoppingCartContent>
           <div>
           {Object.values(CartItems).length > 0 ? (
                 Object.values(CartItems).map((product, index) => (
@@ -100,13 +122,14 @@ const ShoppingCart = ({toggleCart}) => {
                     }}>Empty Cart, please add items</div>
                   )}
             </div>
+          </ShoppingCartContent>
           <CartFooter>
             <DiscountInput
               placeholder="Enter discount code"
               // value={discountCode}
               // onChange={handleDiscountChange}
             />
-            <div style={{ marginBottom: '10px', fontWeight: 'bold' }}>
+            <div style={{ marginBottom: '10px', fontWeight: 'bold', borderTop: "1px solid #ccc", padding:"5px" }}>
               Subtotal: ${totalPrice.toFixed(2)}
             </div>
             <CheckoutButton>Continue to Checkout</CheckoutButton>
