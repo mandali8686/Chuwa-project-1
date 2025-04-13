@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCurrentProduct } from "../../features/product/productReducer";
-import { addCartItem, removeCartItem, clearCart} from '../../features/cart'
+import { productReducer, setCurrentProduct } from "../../features/product/productReducer";
+import { addCartItem, removeCartItem, clearCartItem} from '../../features/cart'
 import styled from '@emotion/styled';
 
 const ProductItemContainer = styled.div`
@@ -82,7 +82,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
             <span className="quantity">{cartQuantity}</span>
             <button className="qty-btn" onClick={increment}>+</button>
           </QuantityBox>
-          <EditButton onClick={() => dispatch(clearCart())}>Remove</EditButton>
+          <EditButton onClick={() => dispatch(clearCartItem({id}))}>Remove</EditButton>
         </ProductControls>
       </ProductInfo>
     </ProductItemContainer>
