@@ -34,14 +34,22 @@ const cartSlice = createSlice({
                 state.count--
             }
         },
+        clearCartItem: (state, action) => {
+            const { id } = action.payload;
+            const itemToRemove = state.CartItems[id];
+            const {cartQuantity, price} = itemToRemove
+            delete state.CartItems[id]
+            state.totalPrice -= cartQuantity*price
+            state.count -= cartQuantity
+        },
         clearCart: (state) => {
             state.CartItems = {};
             state.totalPrice = 0;
             state.count = 0;
-        },
+        }
     }
 })
 
 
-export const { addCartItem, removeCartItem, clearCart } = cartSlice.actions;
+export const { addCartItem, removeCartItem, clearCart, clearCartItem } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;
