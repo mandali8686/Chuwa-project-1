@@ -1,42 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addCartItem, removeCartItem } from '../../features/cart'
+
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
+
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
-  const itemInCart = useSelector(state =>
-    state.cart.CartItems[id]
-  );
-  const [quantity, setQuantity] = useState(itemInCart?.cartQuantity?? 0);
+
+  const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(setCurrentProduct({ image, name, price, description, category, outOfStock }));
+    dispatch(setCurrentProduct({ id, image, name, price, description, category, outOfStock }));
     navigate("/product-details");
   };
 
   const increment = () => {
-     setQuantity((prev) => prev + 1)
+    //  setQuantity((prev) => prev + 1)
      const payload = { id, name, price, image };
      dispatch(addCartItem(payload));
     }
 
   const decrement = () =>{
-    setQuantity((prev) => Math.max(0, prev - 1));
+    // setQuantity((prev) => Math.max(0, prev - 1));
     const payload = { id, name, price, image };
      dispatch(removeCartItem(payload));
   }
 
-  useEffect(() => {
-    if (itemInCart) {
-      setQuantity(itemInCart.cartQuantity);
-    } else {
-      setQuantity(0);
-    }
-  }, [itemInCart]);
+  // useEffect(() => {
+  //   if (itemInCart) {
+  //     setQuantity(itemInCart.cartQuantity);
+  //   } else {
+  //     setQuantity(0);
+  //   }
+  // }, [itemInCart]);
 
   return (
     <div className="product-item-container" onClick={handleClick}>

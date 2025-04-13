@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./ProductDetails.css";
 import { useNavigate } from "react-router-dom";
+import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
 
 
 function ProductDetails() {
   const product = useSelector((state) => state.product.currentProduct);
-  const [quantity, setQuantity] = useState(0);
-  const increment = () => setQuantity((prev) => prev + 1);
-  const decrement = () => setQuantity((prev) => Math.max(1, prev - 1));
+  console.log("Product Detial", product);
+  const quantity = useSelector(product ? selectQuantityById(product.id) : () => 0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const increment = () => {
+    dispatch(addCartItem({ id: product.id, name, price, image }));
+  };
+  
+  const decrement = () => {
+    dispatch(removeCartItem({ id: product.id, price }));
+  };
 
   useEffect(() => {
     if (!product) {
