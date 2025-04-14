@@ -31,7 +31,6 @@ const userSlice = createSlice({
             state.error = null;
           })
           .addCase(loginUser.fulfilled, (state, action) => {
-            // console.log('Passing Token',action.payload.token)
             localStorage.setItem('token', action.payload.token)
             state.loading = false;
             state.currentUser = action.payload.user;
@@ -74,7 +73,6 @@ export const createUserAsync = createAsyncThunk(
                 return rejectWithValue(data.message)
             }
             const data = await res.json();
-            console.log(data);
             return data;
         } catch(e){
             return rejectWithValue(e.message);// the rejected case in the slice will handle the error when the action is rejected
@@ -100,7 +98,6 @@ export const loginUser = createAsyncThunk(
               if (!res.ok) {
                 return rejectWithValue(data.message)
             }
-            console.log('Login Return', data);
             return data;
         } catch(e){
             return rejectWithValue(e.message);
