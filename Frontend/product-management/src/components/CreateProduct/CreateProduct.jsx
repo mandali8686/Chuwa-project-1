@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CreateProduct.css";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CreateProduct = () => {
   const [form, setForm] = useState({
@@ -12,6 +14,15 @@ const CreateProduct = () => {
   });
 
   const [preview, setPreview] = useState("");
+
+  const user = useSelector((state) => state.user?.currentUser);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/error");
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

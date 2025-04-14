@@ -1,31 +1,53 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addCartItem, removeCartItem } from '../../features/cart'
+import { addCartItem, removeCartItem } from "../../features/cart";
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
-function ProductItem({ id, image, name, price, description, category, outOfStock }) {
+function ProductItem({
+  id,
+  image,
+  name,
+  price,
+  description,
+  category,
+  outOfStock,
+}) {
   const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(setCurrentProduct({ image, name, price, description, category, outOfStock }));
+    dispatch(
+      setCurrentProduct({
+        image,
+        name,
+        price,
+        description,
+        category,
+        outOfStock,
+      })
+    );
     navigate("/product-details");
   };
 
   const increment = () => {
-     setQuantity((prev) => prev + 1)
-     const payload = { id, name, price, image };
-     dispatch(addCartItem(payload));
+    if (outOfStock) {
+      navigate("/error");
+      return;
     }
 
-  const decrement = () =>{
+    setQuantity((prev) => prev + 1);
+    const payload = { id, name, price, image };
+    dispatch(addCartItem(payload));
+  };
+
+  const decrement = () => {
     setQuantity((prev) => Math.max(0, prev - 1));
     const payload = { id, name, price, image };
-     dispatch(removeCartItem(payload));
-  }
+    dispatch(removeCartItem(payload));
+  };
 
   return (
     <div className="product-item-container" onClick={handleClick}>
@@ -37,9 +59,13 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
         </p>
         <div className="product-controls" onClick={(e) => e.stopPropagation()}>
           <div className="quantity-box">
-            <button className="qty-btn" onClick={decrement}>−</button>
+            <button className="qty-btn" onClick={decrement}>
+              −
+            </button>
             <span className="quantity">{quantity}</span>
-            <button className="qty-btn" onClick={increment}>+</button>
+            <button className="qty-btn" onClick={increment}>
+              +
+            </button>
           </div>
           <button className="edit-btn">Edit</button>
         </div>
