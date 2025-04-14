@@ -24,7 +24,7 @@ const CreateProduct = () => {
   const handleSubmit = async (values) => {
     try {
       const resultAction = await dispatch(createNewProduct(values));
-  
+
       if (createNewProduct.fulfilled.match(resultAction)) {
         message.success("Product created successfully!");
         form.resetFields();
@@ -33,12 +33,11 @@ const CreateProduct = () => {
         message.error(resultAction.payload || "Failed to create product");
       }
     } catch (err) {
-      console.error(err);
       message.error("Something went wrong!");
 
     }
   };
-  
+
   return (
 
     <div className="create-product-container" style={{ maxWidth: 600, margin: "0 auto" }}>
