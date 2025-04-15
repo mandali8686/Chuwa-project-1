@@ -7,8 +7,23 @@ import Layout from './components/Layout'; // new
 import CreateProduct from './components/CreateProduct/CreateProduct';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import SignIn from './components/auth/SignIn';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setCurrentUser } from './features/user';
+
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (token && user) {
+      dispatch(setCurrentUser(user));
+    }
+  }, [dispatch]);
+
   return (
     <Routes>
     <Route element={<Layout />}>
