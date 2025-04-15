@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     currentUser: null,
     isAuthenticated: false,
-    error: null
+    error: null,
+    cart: []
 };
 
 const userSlice = createSlice({

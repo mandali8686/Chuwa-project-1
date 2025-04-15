@@ -6,17 +6,18 @@ import { addCartItem, removeCartItem, selectQuantityById } from '../../features/
 
 
 function ProductDetails() {
+  const userId = useSelector((state) => state.user.currentUser?._id);
   const product = useSelector((state) => state.product.currentProduct);
   const quantity = useSelector(product ? selectQuantityById(product.id) : () => 0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const increment = () => {
-    dispatch(addCartItem({ id: product.id, name, price, image }));
+    dispatch(addCartItem({ id: product.id, name, price, image, userId }));
   };
 
   const decrement = () => {
-    dispatch(removeCartItem({ id: product.id, price }));
+    dispatch(removeCartItem({ id: product.id, price, userId }));
   };
 
   useEffect(() => {

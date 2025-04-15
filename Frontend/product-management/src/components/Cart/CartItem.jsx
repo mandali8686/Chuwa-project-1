@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { productReducer, setCurrentProduct } from "../../features/product/productReducer";
 import { addCartItem, removeCartItem, clearCartItem} from '../../features/cart'
 import styled from '@emotion/styled';
@@ -52,6 +52,8 @@ const EditButton = styled.button`
 function CartItem({ id, image, name, price, description, cartQuantity, category, outOfStock }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.user.currentUser?._id);
+
 
   const handleClick = () => {
     dispatch(setCurrentProduct({ image, name, price, description, category, cartQuantity }));
@@ -59,18 +61,19 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
   };
 
   const increment = () => {
-    const payload = { id, name, price, image };
+    const payload = { id, name, price, image, userId };
+    console.log("payload: ", payload)
     dispatch(addCartItem(payload));
   };
 
   const decrement = () => {
-    const payload = { id, name, price, image };
+    const payload = { id, name, price, image, userId };
     dispatch(removeCartItem(payload));
   };
 
   return (
     <ProductItemContainer onClick={handleClick}>
-        <img  src={image} alt={name} style={{height: "100%", objectFit: "cover"}}/>
+        <img  src={image} alt={name} style={{width:"100%",height: "100%", objectFit: "cover"}}/>
       <ProductInfo>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <strong className="product-name">{name}</strong>

@@ -11,6 +11,7 @@ import "./ProductItem.css";
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
 
   const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+  const userId = useSelector((state) => state.user.currentUser?._id);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,13 +23,13 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
 
   const increment = () => {
     //  setQuantity((prev) => prev + 1)
-     const payload = { id, name, price, image };
+     const payload = { id, name, price, image, userId };
      dispatch(addCartItem(payload));
     }
 
   const decrement = () =>{
     // setQuantity((prev) => Math.max(0, prev - 1));
-    const payload = { id, name, price, image };
+    const payload = { id, name, price, image, userId };
      dispatch(removeCartItem(payload));
   }
 
