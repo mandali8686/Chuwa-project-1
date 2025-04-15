@@ -17,6 +17,7 @@ const userSlice = createSlice({
         },
         clearUser: (state) => {
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
             state.currentUser = null;
             state.isAuthenticated = false;
         },
@@ -32,6 +33,7 @@ const userSlice = createSlice({
           })
           .addCase(loginUser.fulfilled, (state, action) => {
             localStorage.setItem('token', action.payload.token)
+            localStorage.setItem('user', JSON.stringify(action.payload.user));
             state.loading = false;
             state.currentUser = action.payload.user;
             state.isAuthenticated = true;
