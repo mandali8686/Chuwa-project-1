@@ -8,21 +8,30 @@ import CreateProduct from './components/CreateProduct/CreateProduct';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import SignIn from './components/auth/SignIn';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from './features/user';
+import {setCartFromLocalStorage} from './features/cart'
 
 
 function App() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
-
-    if (token && user) {
-      dispatch(setCurrentUser(user));
+    const storedUser = localStorage.getItem('user');
+    if (token && storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      dispatch(setCurrentUser(parsedUser));
+      dispatch(setCartFromLocalStorage({ userId: parsedUser._id }));
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setCartFromLocalStorage({ userId: user._id }));
+    }
+  }, [user, dispatch]);
 
   return (
     <Routes>
