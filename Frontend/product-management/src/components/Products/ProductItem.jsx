@@ -11,6 +11,8 @@ import "./ProductItem.css";
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
 
   const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+  const user = useSelector((state) => state.user.currentUser);
+  // console.log('Cur User', user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,7 +56,7 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
             <span className="quantity">{quantity}</span>
             <button className="qty-btn" onClick={increment}>+</button>
           </div>
-          <button className="edit-btn">Edit</button>
+          {(user.role==='admin')&&<button className="edit-btn">Edit</button>}
         </div>
       </div>
     </div>

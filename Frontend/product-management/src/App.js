@@ -7,6 +7,8 @@ import Layout from './components/Layout'; // new
 import CreateProduct from './components/CreateProduct/CreateProduct';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import SignIn from './components/auth/SignIn';
+import UpdatePassword from './components/auth/UpdatePassword';
+import ForgetPassword from './components/auth/ForgetPassword';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/error" element={<ErrorPage />} />
+      <Route path="/update-password" element={<UpdatePassword />} />
+      <Route path="/forget-password" element={<ForgetPassword />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/products" element={<Products />} />

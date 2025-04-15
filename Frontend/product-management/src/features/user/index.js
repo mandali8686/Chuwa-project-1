@@ -53,7 +53,20 @@ const userSlice = createSlice({
           .addCase(createUserAsync.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload || action.error.message;
-          });
+          })
+          .addCase(updatePassword.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+          })
+          .addCase(updatePassword.fulfilled, (state, action) => {
+            state.loading = false;
+            state.currentUser = action.payload; // update user info in store
+            state.error = null;
+          })
+          .addCase(updatePassword.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload || action.error.message;
+          });          
       },
 
 })
@@ -106,6 +119,30 @@ export const loginUser = createAsyncThunk(
             return rejectWithValue(e.message);
         }
     }
+)
+
+export const updatePassword = createAsyncThunk(
+  'user/updatePassword',
+  async({userId, newPassword}, {rejectWithValue})=>{
+    try{
+      const token = localStorage.getItem('token');
+      const res = await fetch(`http://localhost:5400/api/users/${userId}`,{
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json',
+          'x-auth-token':token
+        },
+        body:JSON.stringify({password: newPassword})
+      });
+      const data = await res.json();
+      if(!res.ok){
+        return rejectWithValue(data.message || 'Failed to update password');
+      }
+      return data;
+    }catch(e){
+      return rejectWithValue(e.message);
+    }
+  }
 )
 
 export const userReducer = userSlice.reducer
