@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     currentUser: null,
     isAuthenticated: false,
-    error: null
+    error: null,
+    cart: []
 };
 
 const userSlice = createSlice({
@@ -17,6 +18,7 @@ const userSlice = createSlice({
         },
         clearUser: (state) => {
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
             state.currentUser = null;
             state.isAuthenticated = false;
         },
@@ -32,6 +34,7 @@ const userSlice = createSlice({
           })
           .addCase(loginUser.fulfilled, (state, action) => {
             localStorage.setItem('token', action.payload.token)
+            localStorage.setItem('user', JSON.stringify(action.payload.user));
             state.loading = false;
             state.currentUser = action.payload.user;
             state.isAuthenticated = true;
@@ -86,7 +89,7 @@ export const loginUser = createAsyncThunk(
     'user/login',
     async ({ email, password }, {rejectWithValue}) => {
         try {
-          console.log('Email, password',email, password);
+          // console.log('Email, password',email, password);
             const res = await fetch("http://localhost:5400/api/login", {
                 method: "POST",
                 headers: {

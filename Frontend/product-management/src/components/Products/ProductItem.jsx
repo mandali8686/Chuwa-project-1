@@ -1,53 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addCartItem, removeCartItem } from "../../features/cart";
+
+import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
+
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
-function ProductItem({
-  id,
-  image,
-  name,
-  price,
-  description,
-  category,
-  outOfStock,
-}) {
-  const [quantity, setQuantity] = useState(0);
+function ProductItem({ id, image, name, price, description, category, outOfStock }) {
+
+  const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+  const userId = useSelector((state) => state.user.currentUser?._id);
+
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(
-      setCurrentProduct({
-        image,
-        name,
-        price,
-        description,
-        category,
-        outOfStock,
-      })
-    );
+
+    dispatch(setCurrentProduct({ id, image, name, price, description, category, outOfStock }));
+
     navigate("/product-details");
   };
 
   const increment = () => {
+
     if (outOfStock) {
       navigate("/error");
       return;
     }
 
-    setQuantity((prev) => prev + 1);
-    const payload = { id, name, price, image };
-    dispatch(addCartItem(payload));
-  };
+   
+    //  setQuantity((prev) => prev + 1)
+     const payload = { id, name, price, image, userId };
+     dispatch(addCartItem(payload));
+    }
 
-  const decrement = () => {
-    setQuantity((prev) => Math.max(0, prev - 1));
-    const payload = { id, name, price, image };
-    dispatch(removeCartItem(payload));
-  };
+  const decrement = () =>{
+    // setQuantity((prev) => Math.max(0, prev - 1));
+    const payload = { id, name, price, image, userId };
+     dispatch(removeCartItem(payload));
+  }
+
+
+  // useEffect(() => {
+  //   if (itemInCart) {
+  //     setQuantity(itemInCart.cartQuantity);
+  //   } else {
+  //     setQuantity(0);
+  //   }
+  // }, [itemInCart]);
 
   return (
     <div className="product-item-container" onClick={handleClick}>

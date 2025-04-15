@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
+import { Form, Input, InputNumber, Button, message, Typography, Card } from "antd";
 import "./CreateProduct.css";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createNewProduct } from "../../features/product/productReducer";
+
+
+const { Title } = Typography;
 
 const CreateProduct = () => {
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    category: "",
-    price: "",
-    stock: "",
-    image: "",
-  });
-
   const [preview, setPreview] = useState("");
+  const dispatch = useDispatch();
+
 
   const user = useSelector((state) => state.user?.currentUser);
   const navigate = useNavigate();
@@ -28,102 +26,112 @@ const CreateProduct = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const [form] = Form.useForm();
+
+
   const handlePreview = () => {
-    setPreview(form.image);
+    const imageUrl = form.getFieldValue("image");
+    if (imageUrl) {
+      setPreview(imageUrl);
+    } else {
+      message.warning("Please enter an image URL first.");
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (values) => {
     try {
-      const response = await fetch("http://localhost:5400/api/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          description: form.description,
-          category: form.category,
-          price: Number(form.price),
-          stock: Number(form.stock),
-          image: form.image,
-        }),
-      });
+      const resultAction = await dispatch(createNewProduct(values));
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to create product");
+      if (createNewProduct.fulfilled.match(resultAction)) {
+        message.success("Product created successfully!");
+        form.resetFields();
+        setPreview("");
+      } else {
+        message.error(resultAction.payload || "Failed to create product");
       }
-
-      alert("Product created successfully!");
-      setForm({
-        name: "",
-        description: "",
-        category: "",
-        price: "",
-        stock: "",
-        image: "",
-      });
-      setPreview("");
     } catch (err) {
-      console.error("Error submitting product:", err);
-      alert("Something went wrong!");
+      message.error("Something went wrong!");
+
     }
   };
 
   return (
-    <div className="create-product-container">
-      <h2>Create Product</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          placeholder="Product name"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <textarea
-          name="description"
-          placeholder="Product Description"
-          value={form.description}
-          onChange={handleChange}
-        />
-        <input
-          name="category"
-          placeholder="Category"
-          value={form.category}
-          onChange={handleChange}
-        />
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={handleChange}
-        />
-        <input
-          name="stock"
-          type="number"
-          placeholder="In Stock Quantity"
-          value={form.stock}
-          onChange={handleChange}
-        />
-        <input
-          name="image"
-          placeholder="Add Image Link"
-          value={form.image}
-          onChange={handleChange}
-        />
-        <button type="button" onClick={handlePreview}>
-          Preview
-        </button>
-        {preview && (
-          <div style={{ marginTop: "10px" }}>
-            <img src={preview} alt="Preview" style={{ width: "150px" }} />
-          </div>
-        )}
-        <br />
-        <button type="submit">Add Product</button>
-      </form>
+
+    <div className="create-product-container" style={{ maxWidth: 600, margin: "0 auto" }}>
+      <Card>
+        <Title level={3}>Create Product</Title>
+
+        <Form
+          layout="vertical"
+          form={form}
+          onFinish={handleSubmit}
+          autoComplete="off"
+        >
+          <Form.Item
+            name="name"
+            label="Product Name"
+            rules={[{ required: true, message: "Please enter product name" }]}
+          >
+            <Input placeholder="Enter product name" />
+          </Form.Item>
+
+          <Form.Item
+            name="description"
+            label="Product Description"
+            rules={[{ required: true, message: "Please enter product description" }]}
+          >
+            <Input.TextArea rows={3} placeholder="Enter description" />
+          </Form.Item>
+
+          <Form.Item
+            name="category"
+            label="Category"
+            rules={[{ required: true, message: "Please enter a category" }]}
+          >
+            <Input placeholder="e.g. electronics, clothing..." />
+          </Form.Item>
+
+          <Form.Item
+            name="price"
+            label="Price"
+            rules={[{ required: true, message: "Please enter price" }]}
+          >
+            <InputNumber prefix="$" min={0} style={{ width: "100%" }} />
+          </Form.Item>
+
+          <Form.Item
+            name="stock"
+            label="In Stock"
+            rules={[{ required: true, message: "Please enter stock quantity" }]}
+          >
+            <InputNumber min={0} style={{ width: "100%" }} />
+          </Form.Item>
+
+          <Form.Item
+            name="imageUrl"
+            label="Image URL"
+            rules={[{ required: true, message: "Please enter image URL" }]}
+          >
+            <Input placeholder="https://example.com/image.png" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="default" onClick={handlePreview} style={{ marginRight: 10 }}>
+              Preview Image
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Add Product
+            </Button>
+          </Form.Item>
+
+          {preview && (
+            <Form.Item label="Image Preview">
+              <img src={preview} alt="Preview" style={{ width: 150 }} />
+            </Form.Item>
+          )}
+        </Form>
+      </Card>
+
     </div>
   );
 };

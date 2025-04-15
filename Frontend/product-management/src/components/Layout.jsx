@@ -6,13 +6,13 @@ import Footer from './Footer/Footer';
 
 function Layout() {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <NavBar />
-      <main>
+      <main style={{ flex: 1, padding: '24px' }}>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

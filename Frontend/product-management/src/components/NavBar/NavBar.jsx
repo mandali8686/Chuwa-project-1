@@ -7,6 +7,7 @@ import { clearUser } from '../../features/user';
 import './NavBar.css';
 import { useSelector } from 'react-redux';
 import ShoppingCart from '../Cart/ShoppingCart';
+import {clearCart} from '../../features/cart'
 
 
 const NavBar = () => {
@@ -30,6 +31,7 @@ const NavBar = () => {
 
   const handleLogOut = () => {
     dispatch(clearUser());
+    dispatch(clearCart())
     closeMobileMenu();
   }
   return (
@@ -86,7 +88,7 @@ const NavBar = () => {
           </li>
         </ul>
       </div>
-        {isCartOpen && <ShoppingCart toggleCart={toggleCart} />}
+        {isCartOpen && isAuthenticated && <ShoppingCart toggleCart={toggleCart} />}
     </nav>
   );
 };

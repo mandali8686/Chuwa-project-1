@@ -1,7 +1,7 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
 export function makeHTTPGETRequest(endpoint, queryParams ={}){
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('token');
     const url = new URL(API_URL + endpoint); //route url
     Object.entries(queryParams).forEach(([key, value])=>{
         url.searchParams.append(key,value);
@@ -18,9 +18,9 @@ export function makeHTTPGETRequest(endpoint, queryParams ={}){
 }
 
 export function makeHTTPPOSTRequest(endpoint, bodyParams={}){
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('token');
     const url = new URL(API_URL + endpoint); 
-    // console.log(`POST Request to ${url}`);
+    console.log(`POST Request to ${url}`, token);
     const headers = new Headers({
         Authorization: `Bearer ${token}`,
         "Content-Type" : "application/json",
@@ -43,7 +43,7 @@ export function makeHTTPPOSTRequest(endpoint, bodyParams={}){
 }
 
 export function makeHTTPPUTRequest(endpoint, bodyParams={}){
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('token');
     const url = new URL(API_URL + endpoint); 
     // console.log(`POST Request to ${url}`);
     const headers = new Headers({
@@ -68,7 +68,7 @@ export function makeHTTPPUTRequest(endpoint, bodyParams={}){
 }
 
 export function makeHTTPDELETERequest(endpoint, queryParams ={}){
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('token');
     const url = new URL(API_URL + endpoint); //route url
 
     const headers = new Headers({
