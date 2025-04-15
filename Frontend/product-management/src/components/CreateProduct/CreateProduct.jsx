@@ -1,8 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import { Form, Input, InputNumber, Button, message, Typography, Card } from "antd";
 import "./CreateProduct.css";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewProduct } from "../../features/product/productReducer";
+
 
 const { Title } = Typography;
 
@@ -10,7 +12,22 @@ const CreateProduct = () => {
   const [preview, setPreview] = useState("");
   const dispatch = useDispatch();
 
+
+  const user = useSelector((state) => state.user?.currentUser);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/error");
+    }
+  }, [user, navigate]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
   const [form] = Form.useForm();
+
 
   const handlePreview = () => {
     const imageUrl = form.getFieldValue("image");

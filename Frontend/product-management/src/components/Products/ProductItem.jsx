@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+
 import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
 
 import { setCurrentProduct } from "../../features/product/productReducer";
@@ -13,15 +14,25 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
   const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
   const userId = useSelector((state) => state.user.currentUser?._id);
 
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClick = () => {
+
     dispatch(setCurrentProduct({ id, image, name, price, description, category, outOfStock }));
+
     navigate("/product-details");
   };
 
   const increment = () => {
+
+    if (outOfStock) {
+      navigate("/error");
+      return;
+    }
+
+   
     //  setQuantity((prev) => prev + 1)
      const payload = { id, name, price, image, userId };
      dispatch(addCartItem(payload));
@@ -32,6 +43,7 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
     const payload = { id, name, price, image, userId };
      dispatch(removeCartItem(payload));
   }
+
 
   // useEffect(() => {
   //   if (itemInCart) {
@@ -51,9 +63,13 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
         </p>
         <div className="product-controls" onClick={(e) => e.stopPropagation()}>
           <div className="quantity-box">
-            <button className="qty-btn" onClick={decrement}>−</button>
+            <button className="qty-btn" onClick={decrement}>
+              −
+            </button>
             <span className="quantity">{quantity}</span>
-            <button className="qty-btn" onClick={increment}>+</button>
+            <button className="qty-btn" onClick={increment}>
+              +
+            </button>
           </div>
           <button className="edit-btn">Edit</button>
         </div>
