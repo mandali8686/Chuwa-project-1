@@ -25,6 +25,9 @@ function ProductItem({ id, image, name, price, description, category, stock, out
   const dispatch = useDispatch();
 
   const handleClick = () => {
+    if(!user){
+      message.error('Please Sign In to View Product Details.')
+    }
     dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/product-details");
   };
