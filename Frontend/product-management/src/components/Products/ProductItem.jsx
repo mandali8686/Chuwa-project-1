@@ -8,6 +8,7 @@ import { addCartItem, removeCartItem, selectQuantityById } from '../../features/
 
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
+import { message } from "antd";
 
 function ProductItem({ id, image, name, price, description, category, stock, outOfStock }) {
 
@@ -24,18 +25,24 @@ function ProductItem({ id, image, name, price, description, category, stock, out
   const dispatch = useDispatch();
 
   const handleClick = () => {
+    if(!user){
+      message.error('Please Sign In to View Product Details.')
+    }
     dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/product-details");
   };
 
   const increment = () => {
+    if(!user){
+      message.error('Please Sign In to Add Product to Cart.')
+      navigate("/signin");
+      return;
+    }
 
     if (outOfStock) {
       navigate("/error");
       return;
     }
-
-
     //  setQuantity((prev) => prev + 1)
      const payload = { id, name, price, image, userId };
      dispatch(addCartItem(payload));
@@ -43,6 +50,11 @@ function ProductItem({ id, image, name, price, description, category, stock, out
 
   const decrement = () =>{
     // setQuantity((prev) => Math.max(0, prev - 1));
+    if(!user){
+      message.error('Please Sign In to Add Product to Cart.')
+      navigate("/signin");
+      return;
+    }
     const payload = { id, name, price, image, userId };
      dispatch(removeCartItem(payload));
   }
@@ -80,7 +92,7 @@ function ProductItem({ id, image, name, price, description, category, stock, out
               +
             </button>
           </div>
-          {(user.role==='admin')&&<button className="edit-btn" onClick={handleEditClick}>Edit</button>}
+          {(user && user.role==='admin')&&<button className="edit-btn" onClick={handleEditClick}>Edit</button>}
         </div>
       </div>
     </div>

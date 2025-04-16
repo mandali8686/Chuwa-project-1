@@ -68,7 +68,20 @@ const userSlice = createSlice({
           .addCase(updatePassword.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload || action.error.message;
-          });          
+          })
+          .addCase(sendResetEmail.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+          })
+          .addCase(sendResetEmail.fulfilled, (state, action) => {
+            state.loading = false;
+            state.currentUser = action.payload; // update user info in store
+            state.error = null;
+          })
+          .addCase(sendResetEmail.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload || action.error.message;
+          });                    
       },
 
 })
@@ -144,6 +157,30 @@ export const updatePassword = createAsyncThunk(
     }
   }
 )
+
+export const sendResetEmail = createAsyncThunk(
+  'user/sendResetEmail',
+  async (email, {rejectWithValue}) => {
+      try {
+          const res = await fetch("http://localhost:5400/api/users/reset-password", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({email}),
+            });
+          if (!res.ok) {
+              const data = await res.json();
+              return rejectWithValue(data.message)
+          }
+          const data = await res.json();
+          return data;
+      } catch(e){
+          return rejectWithValue(e.message);
+      }
+  }
+)
+
 
 export const userReducer = userSlice.reducer
 export const {setCurrentUser, clearUser, clearError} = userSlice.actions
