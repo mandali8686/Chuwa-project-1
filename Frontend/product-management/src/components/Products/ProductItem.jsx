@@ -10,7 +10,7 @@ import "./ProductItem.css";
 
 function ProductItem({ id, image, name, price, description, category, outOfStock }) {
 
-  const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+  const quantity = useSelector(selectQuantityById(id));
   const userId = useSelector((state) => state.user.currentUser?._id);
 
   const navigate = useNavigate();

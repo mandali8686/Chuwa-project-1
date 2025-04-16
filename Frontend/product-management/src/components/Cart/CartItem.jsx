@@ -62,7 +62,6 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
 
   const increment = () => {
     const payload = { id, name, price, image, userId };
-    console.log("payload: ", payload)
     dispatch(addCartItem(payload));
   };
 
@@ -85,7 +84,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
             <span className="quantity">{cartQuantity}</span>
             <button className="qty-btn" onClick={increment}>+</button>
           </QuantityBox>
-          <EditButton onClick={() => dispatch(clearCartItem({id}))}>Remove</EditButton>
+          <EditButton onClick={() => dispatch(clearCartItem({userId, id}))}>Remove</EditButton>
         </ProductControls>
       </ProductInfo>
     </ProductItemContainer>

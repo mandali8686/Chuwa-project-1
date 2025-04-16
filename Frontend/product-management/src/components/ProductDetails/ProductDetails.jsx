@@ -8,7 +8,7 @@ import { addCartItem, removeCartItem, selectQuantityById } from '../../features/
 function ProductDetails() {
   const userId = useSelector((state) => state.user.currentUser?._id);
   const product = useSelector((state) => state.product.currentProduct);
-  const quantity = useSelector(product ? selectQuantityById(product.id) : () => 0);
+  const quantity = useSelector(selectQuantityById(product.id));
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

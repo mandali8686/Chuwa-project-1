@@ -1,71 +1,169 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const initialState = {
-    CartItems: {}, //{id:{item detail}},
-    loading: false,
-    totalPrice: 0,
-    count: 0,
-    error: null,
-}
+// Fetch user's cart
+export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`http://localhost:5400/api/carts/${userId}`);
+    if (!res.ok) throw new Error("Failed to fetch cart.");
+    const data = await res.json();
+    return data.items || [];
+  } catch (err) {
+    return rejectWithValue(err.message);
+  }
+});
 
+// Add item to cart
+export const addCartItem = createAsyncThunk("cart/addItem", async (payload, { rejectWithValue }) => {
+  try {
+    const res = await fetch('http://localhost:5400/api/carts/add', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("Failed to add item to cart.");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return rejectWithValue(err.message);
+  }
+});
+
+// Remove item from cart
+export const removeCartItem = createAsyncThunk("cart/removeItem", async (payload, { rejectWithValue }) => {
+  try {
+    const res = await fetch('http://localhost:5400/api/carts/remove', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("Failed to remove item.");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return rejectWithValue(err.message);
+  }
+});
+
+// Clear a specific item from the cart
+export const clearCartItem = createAsyncThunk("cart/clearItem", async (payload, { rejectWithValue }) => {
+  try {
+    const res = await fetch('http://localhost:5400/api/carts/clear-item', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("Failed to clear item.");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return rejectWithValue(err.message);
+  }
+});
+
+// Clear entire cart
+export const clearCart = createAsyncThunk("cart/clearAll", async (userId, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`http://localhost:5400/api/carts/clear/${userId}`, {
+      method: "POST",
+    });
+    if (!res.ok) throw new Error("Failed to clear cart.");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return rejectWithValue(err.message);
+  }
+});
+
+// Slice
 const cartSlice = createSlice({
-    name: 'cart',
-    initialState,
-    reducers: {
-        setCartFromLocalStorage: (state, action) => {
-            const { userId } = action.payload;
-            const storedCart = JSON.parse(localStorage.getItem(`cart_${userId}`));
-            if (storedCart) {
-                state.CartItems = storedCart.CartItems || {};
-                state.totalPrice = storedCart.totalPrice || 0;
-                state.count = storedCart.count || 0;
-              }
-        },
-        addCartItem: (state, action) => {
-            const { id, name, price, image, userId } = action.payload;
-            if (state.CartItems[id]) {
-                state.CartItems[id].cartQuantity += 1;
-            } else {
-                state.CartItems[id] = { id, name, price, image, cartQuantity: 1 };
-            }
-            state.count++
-            state.totalPrice += price
-            localStorage.setItem(`cart_${userId}`, JSON.stringify(state));
-        },
-        removeCartItem: (state, action) => {
-            const { id, price, userId } = action.payload;
-            if(state.CartItems[id]) {
-                if(state.CartItems[id].cartQuantity > 1) {
-                    state.CartItems[id].cartQuantity -= 1;
-                } else {
-                    delete state.CartItems[id]
-                }
-                state.totalPrice -= price;
-                state.count--
-            }
-            localStorage.setItem(`cart_${userId}`, JSON.stringify(state));
-        },
-        clearCartItem: (state, action) => {
-            const { id, userId } = action.payload;
-            const itemToRemove = state.CartItems[id];
-            const {cartQuantity, price} = itemToRemove
-            delete state.CartItems[id]
-            state.totalPrice -= cartQuantity*price
-            state.count -= cartQuantity
-            localStorage.setItem(`cart_${userId}`, JSON.stringify(state));
-        },
-        clearCart: (state) => {
-            state.CartItems = {};
-            state.totalPrice = 0;
-            state.count = 0;
-            localStorage.removeItem('cart');
+  name: 'cart',
+  initialState: {
+    CartItems: {},
+    loading: false,
+    error: null,
+    count: 0,
+    totalPrice: 0,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // fetchCart
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        const items = action.payload;
+        let total = 0, count = 0;
+        state.CartItems = {};
+        items.forEach(item => {
+          state.CartItems[item.id] = item;
+          total += item.price * item.cartQuantity;
+          count += item.cartQuantity;
+        });
+        state.totalPrice = total;
+        state.count = count;
+        state.error = null;
+      })
+
+      // addCartItem
+      .addCase(addCartItem.fulfilled, (state, action) => {
+        const items = action.payload.items;
+        let total = 0, count = 0;
+        state.CartItems = {};
+        items.forEach(item => {
+          state.CartItems[item.id] = item;
+          total += item.price * item.cartQuantity;
+          count += item.cartQuantity;
+        });
+        state.totalPrice = total;
+        state.count = count;
+        state.error = null;
+      })
+
+      // removeCartItem
+      .addCase(removeCartItem.fulfilled, (state, action) => {
+        const items = action.payload.items;
+        let total = 0, count = 0;
+        state.CartItems = {};
+        items.forEach(item => {
+          state.CartItems[item.id] = item;
+          total += item.price * item.cartQuantity;
+          count += item.cartQuantity;
+        });
+        state.totalPrice = total;
+        state.count = count;
+        state.error = null;
+      })
+
+      // clearCartItem
+      .addCase(clearCartItem.fulfilled, (state, action) => {
+        const items = action.payload.items;
+        let total = 0, count = 0;
+        state.CartItems = {};
+        items.forEach(item => {
+          state.CartItems[item.id] = item;
+          total += item.price * item.cartQuantity;
+          count += item.cartQuantity;
+        });
+        state.totalPrice = total;
+        state.count = count;
+        state.error = null;
+      })
+
+      // clearCart
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.CartItems = {};
+        state.totalPrice = 0;
+        state.count = 0;
+        state.error = null;
+      })
+
+      // common error handling
+      .addMatcher(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.error = action.payload || action.error.message;
         }
-    }
-})
+      );
+  }
+});
 
-export const selectQuantityById = (id) => (state) => {
-    return state.cart.CartItems[id]?.cartQuantity || 0;
-  };
-
-export const { addCartItem, removeCartItem, clearCart, clearCartItem, setCartFromLocalStorage } = cartSlice.actions;
+export const selectQuantityById = (id) => (state) => state.cart.CartItems[id]?.cartQuantity || 0;
 export const cartReducer = cartSlice.reducer;

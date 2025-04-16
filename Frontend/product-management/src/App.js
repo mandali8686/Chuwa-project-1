@@ -10,7 +10,7 @@ import SignIn from './components/auth/SignIn';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from './features/user';
-import {setCartFromLocalStorage} from './features/cart'
+import {fetchCart} from './features/cart'
 
 
 function App() {
@@ -23,13 +23,13 @@ function App() {
     if (token && storedUser) {
       const parsedUser = JSON.parse(storedUser);
       dispatch(setCurrentUser(parsedUser));
-      dispatch(setCartFromLocalStorage({ userId: parsedUser._id }));
+      dispatch(fetchCart(parsedUser._id));
     }
   }, [dispatch]);
 
   useEffect(() => {
     if (user) {
-      dispatch(setCartFromLocalStorage({ userId: user._id }));
+      dispatch(fetchCart(user._id));
     }
   }, [user, dispatch]);
 

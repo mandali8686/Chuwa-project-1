@@ -20,6 +20,7 @@ const ShoppingCartContainer = styled.div`
     width: 100%;
     height: 100vh;
     background: white;
+    overflow-y: auto;
   }
 `
 

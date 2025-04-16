@@ -31,7 +31,6 @@ const NavBar = () => {
 
   const handleLogOut = () => {
     dispatch(clearUser());
-    dispatch(clearCart())
     closeMobileMenu();
   }
   return (
