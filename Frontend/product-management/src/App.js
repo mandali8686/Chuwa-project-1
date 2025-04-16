@@ -11,7 +11,7 @@ import SignIn from './components/auth/SignIn';
 import UpdatePassword from './components/auth/UpdatePassword';
 import ForgetPassword from './components/auth/ForgetPassword';
 
-import { useEffect } from 'react';
+import { useEffect , useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from './features/user';
 import {fetchCart} from './features/cart'
@@ -20,6 +20,7 @@ import {fetchCart} from './features/cart'
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -28,6 +29,7 @@ function App() {
       const parsedUser = JSON.parse(storedUser);
       dispatch(setCurrentUser(parsedUser));
       dispatch(fetchCart(parsedUser._id));
+      setIsLoaded(true);
     }
   }, [dispatch]);
 
@@ -38,22 +40,26 @@ function App() {
   }, [user, dispatch]);
 
   return (
-    <Routes>
-    <Route element={<Layout />}>
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/error" element={<ErrorPage />} />
-      <Route path="/update-password" element={<UpdatePassword />} />
-      <Route path="/forget-password" element={<ForgetPassword />} />
+    isLoaded ? (
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/error" element={<ErrorPage />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/products" element={<Products />} />
-        <Route path="/product-details" element={<ProductDetails />} />
-        <Route path="/create-product" element={<CreateProduct />} />
-        <Route path="/" element={<Products />} />
-      </Route>
-    </Route>
-  </Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/products" element={<Products />} />
+            <Route path="/product-details" element={<ProductDetails />} />
+            <Route path="/create-product" element={<CreateProduct />} />
+            <Route path="/" element={<Products />} />
+          </Route>
+        </Route>
+      </Routes>
+    ) : (
+      <div>Loading...</div>
+    )
   );
 }
 
