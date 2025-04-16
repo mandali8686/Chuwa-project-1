@@ -12,9 +12,12 @@ function Products() {
   const dispatch = useDispatch();
   const { list: products, loading, error } = useSelector((state) => state.product);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.currentUser);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
+
+  const [sortKey, setSortKey] = useState('last');
 
 
   useEffect(() => {
@@ -24,8 +27,19 @@ function Products() {
   const handleAddProduct = ()=>{
     navigate('/create-product');
   }
+  const getSortedProducts = () => {
+    const sorted = [...products]; // clone to avoid mutating state
+    if (sortKey === 'priceLow') {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortKey === 'priceHigh') {
+      sorted.sort((a, b) => b.price - a.price);
+    } else if (sortKey === 'last') {
+      sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    return sorted;
+  };
 
-  const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedProducts = getSortedProducts().slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="products-page">
@@ -35,8 +49,8 @@ function Products() {
 
         
         <div className="products-controls">
-          <SortDropdown />
-          <button className="add-btn" onClick={handleAddProduct}>Add Product</button>
+        <SortDropdown onSortChange={setSortKey} />
+        {(user.role==='admin')&&<button className="add-btn" onClick={handleAddProduct}>Add Product</button>}
         </div>
       </div>
 

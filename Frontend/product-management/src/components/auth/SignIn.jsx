@@ -117,7 +117,7 @@ const SignIn = () => {
                   Don't have an account? <a href="/signup">Sign Up</a>
                 </p>
                 <p>
-                <a href="/signup">Forget Password?</a>
+                <a href="/forget-password">Forget Password?</a>
                 </p>
           </ResponsiveFooter>
         </StyledForm>

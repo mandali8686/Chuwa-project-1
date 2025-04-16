@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { Dropdown, Menu, Space } from 'antd';
 import { DownOutlined, CheckOutlined } from '@ant-design/icons';
 
-const SortDropdown = () => {
+const SortDropdown = ({ onSortChange }) => {
   const [selectedKey, setSelectedKey] = useState('last');
+
+  const handleMenuClick = (e) => {
+    setSelectedKey(e.key);
+    if (onSortChange) {
+      onSortChange(e.key); // <-- Notify parent
+    }
+  };
 
   const items = [
     {
@@ -35,25 +42,14 @@ const SortDropdown = () => {
     },
   ];
 
-  const handleMenuClick = (e) => {
-    setSelectedKey(e.key);
-    console.log('Selected:', e.key);
-  };
-
-  const menu = (
-    <Menu onClick={handleMenuClick} items={items} />
-  );
+  const menu = <Menu onClick={handleMenuClick} items={items} />;
 
   const getSelectedLabel = () => {
     switch (selectedKey) {
-      case 'last':
-        return 'Last added';
-      case 'priceLow':
-        return 'Price: low to high';
-      case 'priceHigh':
-        return 'Price: high to low';
-      default:
-        return 'Sort';
+      case 'last': return 'Last added';
+      case 'priceLow': return 'Price: low to high';
+      case 'priceHigh': return 'Price: high to low';
+      default: return 'Sort';
     }
   };
 

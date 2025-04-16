@@ -1,5 +1,6 @@
 const User = require('../models/Users');
 const Order = require('../models/Orders');
+const bcrypt = require('bcryptjs');
 
 // Get all users (admin only)
 const getAllUsers = async (req, res) => {
@@ -70,6 +71,11 @@ const createUser = async (req, res) => {
             return res.status(400).json({ message: 'Email already in use' });
         }
         const user = new User(req.body);
+        if (req.body.password) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            user.password = hashedPassword;
+        }
+        
         await user.save();
         res.status(201).json({ message: 'User created successfully', user });
     } catch (err) {
@@ -89,6 +95,10 @@ const updateUser = async (req, res) => {
         user.lastName = req.body.lastName ?? user.lastName;
         user.email = req.body.email ?? user.email;
         user.role = req.body.role ?? user.role;
+        if (req.body.password) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            user.password = hashedPassword;
+        }
 
         await user.save();
         res.status(200).json(user);
