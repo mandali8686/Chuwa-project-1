@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updatePassword } from "../../features/user/index";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import styled from '@emotion/styled';
 
 
 const UpdatePassword = () => {
@@ -13,6 +14,15 @@ const UpdatePassword = () => {
   const { token } = useParams();
   localStorage.setItem('token', token);
   const [userId, setUserId] = useState(null);
+  const CardContainer = styled(Card)`
+  height: 100vh;
+  background: rgba(190, 185, 185, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  box-shadow: none;
+`;
 
   useEffect(() => {
     try {
@@ -41,6 +51,7 @@ const UpdatePassword = () => {
   };
 
   return (
+    <CardContainer>
     <Card style={{ maxWidth: 400, margin: "0 auto", marginTop: "10%" }}>
       <h2>Update Password</h2>
       <Form layout="vertical" onFinish={onFinish}>
@@ -58,6 +69,7 @@ const UpdatePassword = () => {
         </Form.Item>
       </Form>
     </Card>
+    </CardContainer>
   );
 };
 
