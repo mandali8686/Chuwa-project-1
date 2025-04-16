@@ -9,7 +9,7 @@ import { addCartItem, removeCartItem, selectQuantityById } from '../../features/
 import { setCurrentProduct } from "../../features/product/productReducer";
 import "./ProductItem.css";
 
-function ProductItem({ id, image, name, price, description, category, outOfStock }) {
+function ProductItem({ id, image, name, price, description, category, stock, outOfStock }) {
 
   const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
 
@@ -24,9 +24,7 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
   const dispatch = useDispatch();
 
   const handleClick = () => {
-
-    dispatch(setCurrentProduct({ id, image, name, price, description, category, outOfStock }));
-
+    dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/product-details");
   };
 
@@ -48,6 +46,12 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
     const payload = { id, name, price, image, userId };
      dispatch(removeCartItem(payload));
   }
+
+  const handleEditClick = () => {
+    dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
+    navigate("/create-product");
+  };
+  
 
 
   // useEffect(() => {
@@ -76,7 +80,7 @@ function ProductItem({ id, image, name, price, description, category, outOfStock
               +
             </button>
           </div>
-          {(user.role==='admin')&&<button className="edit-btn">Edit</button>}
+          {(user.role==='admin')&&<button className="edit-btn" onClick={handleEditClick}>Edit</button>}
         </div>
       </div>
     </div>

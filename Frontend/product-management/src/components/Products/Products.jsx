@@ -72,6 +72,7 @@ function Products() {
             price={product.price}
             description={product.description}
             category={product.category || 'Category Placeholder'}
+            stock={product.stock || 0}
             outOfStock={product.outOfStock}
             />
           </Col>
