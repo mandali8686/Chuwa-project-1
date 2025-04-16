@@ -37,7 +37,7 @@ const NavBar = () => {
   };
 
   const closeMobileMenu = () => {
-    dispatch(setCurrentProduct(null));
+    
     setIsMobileMenuOpen(false);
   };
 

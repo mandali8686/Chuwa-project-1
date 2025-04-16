@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts } from "../../features/product/productReducer";
+import { fetchAllProducts, setCurrentProduct } from "../../features/product/productReducer";
 import ProductItem from './ProductItem';
 import './Products.css';
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ function Products() {
 
 
   useEffect(() => {
+    dispatch(setCurrentProduct(null));
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
