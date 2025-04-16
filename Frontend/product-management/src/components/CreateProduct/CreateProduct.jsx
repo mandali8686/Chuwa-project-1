@@ -1,16 +1,44 @@
+
 import React, { useEffect, useState } from "react";
 import { Form, Input, InputNumber, Button, message, Typography, Card } from "antd";
 import "./CreateProduct.css";
 import { useDispatch, useSelector } from "react-redux";
-import { createNewProduct } from "../../features/product/productReducer";
+import { createNewProduct, updateProductById } from "../../features/product/productReducer";
+import { useNavigate } from "react-router-dom";
+
 
 const { Title } = Typography;
 
 const CreateProduct = () => {
   const [preview, setPreview] = useState("");
   const dispatch = useDispatch();
-
+  const user = useSelector((state) => state.user?.currentUser);
+  const navigate = useNavigate();
+  const currentProduct = useSelector(state => state.product.currentProduct);
+  const isEditMode = !!currentProduct;
   const [form] = Form.useForm();
+
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/error");
+    }
+    if (isEditMode) {
+      form.setFieldsValue({
+        name: currentProduct.name,
+        description: currentProduct.description,
+        category: currentProduct.category,
+        price: currentProduct.price,
+        stock: currentProduct.stock,
+        imageUrl: currentProduct.image || currentProduct.imageUrl
+      });
+      setPreview(currentProduct.image || currentProduct.imageUrl);
+    }
+  }, [user, navigate, currentProduct, isEditMode, form]);
+
+  // const handleChange = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  // };
 
   const handlePreview = () => {
     const imageUrl = form.getFieldValue("image");
@@ -23,26 +51,32 @@ const CreateProduct = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const resultAction = await dispatch(createNewProduct(values));
-
-      if (createNewProduct.fulfilled.match(resultAction)) {
-        message.success("Product created successfully!");
+      let resultAction;
+      if (isEditMode) {
+        resultAction = await dispatch(updateProductById({ productId: currentProduct.id, updatedData: values }));
+      } else {
+        resultAction = await dispatch(createNewProduct(values));
+      }
+  
+      if ((isEditMode ? updateProductById.fulfilled : createNewProduct.fulfilled).match(resultAction)) {
+        message.success(isEditMode ? "Product updated successfully!" : "Product created successfully!");
         form.resetFields();
         setPreview("");
       } else {
-        message.error(resultAction.payload || "Failed to create product");
+        message.error(resultAction.payload || "Failed to save product");
       }
     } catch (err) {
+      console.error(err);
       message.error("Something went wrong!");
-
     }
   };
+  
 
   return (
 
     <div className="create-product-container" style={{ maxWidth: 600, margin: "0 auto" }}>
       <Card>
-        <Title level={3}>Create Product</Title>
+      <Title level={3}>{isEditMode ? 'Edit Product' : 'Create Product'}</Title>
 
         <Form
           layout="vertical"
@@ -103,7 +137,7 @@ const CreateProduct = () => {
               Preview Image
             </Button>
             <Button type="primary" htmlType="submit">
-              Add Product
+              {isEditMode ? 'Update Product' : 'Add Product'}
             </Button>
           </Form.Item>
 

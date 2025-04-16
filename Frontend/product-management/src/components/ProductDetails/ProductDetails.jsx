@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./ProductDetails.css";
 import { useNavigate } from "react-router-dom";
 import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
+import { setCurrentProduct } from "../../features/product/productReducer";
 
 
 function ProductDetails() {
@@ -28,7 +29,14 @@ function ProductDetails() {
 
   if (!product) return null;
 
-  const { image, name, price, description, category, outOfStock } = product;
+  const { id, image, name, price, description, category, stock, outOfStock } = product;
+  console.log('Product', product);
+
+  const handleEditClick = () => {
+      dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
+      navigate("/create-product");
+    };
+    
 
   return (
     <div className="product-detail-wrapper">
@@ -54,7 +62,7 @@ function ProductDetails() {
               <span className="quantity">{quantity}</span>
               <button className="qty-btn" onClick={increment}>+</button>
             </div>
-            <button className="detail-edit-btn">Edit</button>
+            <button className="detail-edit-btn" onClick={handleEditClick}>Edit</button>
           </div>
         </div>
       </div>
