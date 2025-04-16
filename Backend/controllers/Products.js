@@ -1,7 +1,7 @@
 const Product = require('../models/Products');
 const User = require('../models/Users');
 
-exports.createProduct = async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.user.email });
     if(user.role !== 'admin') {
@@ -40,7 +40,7 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-exports.updateProduct = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.user.email });
     if(user.role !== 'admin') {
@@ -87,7 +87,7 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.user.email });
     if(user.role !== 'admin') {
@@ -118,7 +118,7 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-exports.getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
     res.json({
@@ -135,7 +135,7 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
-exports.getProduct = async (req, res) => {
+const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -158,4 +158,12 @@ exports.getProduct = async (req, res) => {
       error: err.message
     });
   }
+};
+
+module.exports = {
+  getAllProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct
 };

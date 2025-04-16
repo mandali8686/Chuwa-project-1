@@ -46,7 +46,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/error" element={<ErrorPage />} />
-          <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/update-password/:token" element={<UpdatePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
 
           <Route element={<ProtectedRoute />}>
@@ -60,6 +60,7 @@ function App() {
     ) : (
       <div>Loading...</div>
     )
+
   );
 }
 

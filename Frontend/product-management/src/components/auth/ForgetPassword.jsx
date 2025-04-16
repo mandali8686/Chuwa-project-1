@@ -1,6 +1,6 @@
 import { Form, Input, Button, message, Card } from "antd";
 import { useDispatch } from "react-redux";
-// import { sendResetEmail } from "../../features/user/index"; 
+import { sendResetEmail } from "../../features/user/index"; 
 import { useNavigate } from "react-router-dom";
 
 const ForgetPassword = () => {
@@ -9,15 +9,15 @@ const ForgetPassword = () => {
 
   const onFinish = async ({ email }) => {
     try {
-    //   const result = await dispatch(sendResetEmail(email));
-    //   if (sendResetEmail.fulfilled.match(result)) {
-    //     message.success("Recovery email sent!");
-    //     navigate('/login');
-    //   } else {
-    //     message.error(result.payload || "Failed to send email");
-    //   }
-    message.success("Recovery email sent!");
-    navigate('/signin');
+      const result = await dispatch(sendResetEmail(email));
+      if (sendResetEmail.fulfilled.match(result)) {
+        message.success("Recovery email sent!");
+        navigate('/signin');
+      } else {
+        message.error(result.payload || "Failed to send email");
+      }
+      // message.success("Recovery email sent!");
+      // navigate('/signin');
     } catch (err) {
       message.error("Unexpected error");
     }
