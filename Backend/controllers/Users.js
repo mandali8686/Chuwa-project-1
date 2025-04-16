@@ -1,8 +1,12 @@
 const User = require('../models/Users');
 const Order = require('../models/Orders');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
-// Get all users (admin only)
+
 const getAllUsers = async (req, res) => {
     try {
         if (req.user.role !== 'admin') {
@@ -13,7 +17,6 @@ const getAllUsers = async (req, res) => {
         if (req.user) {
             users = await User.find();
         } else {
-            // Anonymous users get only firstName & lastName
             users = await User.find({}, 'firstName lastName');
         }
         res.status(200).json(users);
@@ -141,11 +144,62 @@ const getUserOrders = async (req, res) => {
     }
 };
 
+const sendResetEmail = async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) return res.status(404).json({ message: 'User not found' });
+      console.log(user);
+  
+      const token = jwt.sign(
+        {
+          user: {
+            id: user._id,
+            email: user.email,
+          }
+        },
+        'ffffffffffff',
+        { expiresIn: '15m' }
+      );
+  
+      await user.save();
+  
+      const resetLink = `http://localhost:3000/update-password/${token}`;
+  
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER, // e.g., yourname@gmail.com
+          pass: 'aewbkpmcnhwkotui'  // your Gmail App Password or SMTP password
+        }
+      });
+  
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Password Reset Request',
+        html: `
+          <h2>Password Reset</h2>
+          <p>Click the link below to reset your password. This link is valid for 15 minutes.</p>
+          <a href="${resetLink}">${resetLink}</a>
+        `
+      };
+  
+      await transporter.sendMail(mailOptions);
+      res.json({ message: 'Reset email sent successfully.' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Error sending reset email.' });
+    }
+  };
+
 module.exports = {
     getAllUsers,
     getOneUser,
     createUser,
     updateUser,
     deleteUser,
-    getUserOrders
+    getUserOrders,
+    sendResetEmail
 };
