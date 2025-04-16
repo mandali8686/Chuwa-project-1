@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { productReducer, setCurrentProduct } from "../../features/product/productReducer";
-import { addCartItem, removeCartItem, clearCartItem} from '../../features/cart'
+import { addCartItem, removeCartItem, selectQuantityById, clearCartItem} from '../../features/cart'
 import styled from '@emotion/styled';
 
 const ProductItemContainer = styled.div`
@@ -54,6 +54,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.currentUser?._id);
   const { error } = useSelector(state => state.cart);
+
 
 
   const handleClick = () => {

@@ -5,7 +5,7 @@ import "./CreateProduct.css";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewProduct, updateProductById } from "../../features/product/productReducer";
 import { useNavigate } from "react-router-dom";
-
+import {fetchCart} from '../../features/cart'
 
 const { Title } = Typography;
 
@@ -57,11 +57,14 @@ const CreateProduct = () => {
       } else {
         resultAction = await dispatch(createNewProduct(values));
       }
-  
+
       if ((isEditMode ? updateProductById.fulfilled : createNewProduct.fulfilled).match(resultAction)) {
         message.success(isEditMode ? "Product updated successfully!" : "Product created successfully!");
         form.resetFields();
         setPreview("");
+        if (user) {
+          dispatch(fetchCart(user._id));  // Dispatch after the update is successful
+        }
       } else {
         message.error(resultAction.payload || "Failed to save product");
       }
@@ -70,7 +73,7 @@ const CreateProduct = () => {
       message.error("Something went wrong!");
     }
   };
-  
+
 
   return (
 
