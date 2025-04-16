@@ -53,6 +53,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.currentUser?._id);
+  const { error } = useSelector(state => state.cart);
 
 
   const handleClick = () => {
@@ -78,6 +79,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
           <strong className="product-name">{name}</strong>
           <p className="product-price" style={{margin: 0, alignSelf: "center"}}>${typeof price === "number" ? price.toFixed(2) : "N/A"}</p>
         </div>
+        {error && <div className="error-message">{error}</div>}
         <ProductControls onClick={(e) => e.stopPropagation()}>
           <QuantityBox>
             <button className="qty-btn" onClick={decrement}>−</button>

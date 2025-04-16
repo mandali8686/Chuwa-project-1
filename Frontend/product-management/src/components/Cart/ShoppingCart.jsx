@@ -118,7 +118,7 @@ const CloseButton = styled.button`
 const ShoppingCart = ({toggleCart}) => {
     const { CartItems, totalPrice, count } = useSelector((state) => state.cart);
     //const cartRef = useRef(null);
-    const [discountCode, setDiscountCode] = useState(null)
+    const [discountCode, setDiscountCode] = useState("")
     const [discount, setDiscount] = useState(0)
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null)

@@ -7,12 +7,13 @@ import { clearUser } from '../../features/user';
 import './NavBar.css';
 import { useSelector } from 'react-redux';
 import ShoppingCart from '../Cart/ShoppingCart';
-import {clearCart} from '../../features/cart'
+import { FaCartShopping } from "react-icons/fa6";
 
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {currentUser, isAuthenticated} = useSelector(state => state.user)
+  const { totalPrice } = useSelector((state) => state.cart);
 
     const [isCartOpen, setIsCartOpen] = useState(false)
     const toggleCart = () => {
@@ -82,7 +83,8 @@ const NavBar = () => {
             style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             onClick ={toggleCart}
             >
-            Cart
+            <FaCartShopping />
+            <span style={{ marginLeft: '6px' }}>${totalPrice ? totalPrice.toFixed(2) : '0.00'}</span>
             </button>
           </li>
         </ul>

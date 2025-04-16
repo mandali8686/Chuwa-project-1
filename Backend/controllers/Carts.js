@@ -12,29 +12,26 @@ exports.getCart = async (req, res) => {
 
 // Add item or increment quantity
 exports.addCartItem = async (req, res) => {
-  console.log("new---------------------")
   const { userId, id, name, image, price } = req.body;
+
   try {
     let cart = await Cart.findOne({ userId });
-    console.log("cart: ", cart)
+
     if (!cart) {
-      console.log("cart before create: ", cart)
       cart = new Cart({ userId, items: [] });
-      console.log("cart after create: ", cart)
     }
 
     const existingItem = cart.items.find(item => item.id === id);
-    console.log("existingItem ", existingItem)
+
     if (existingItem) {
       existingItem.cartQuantity += 1;
     } else {
       cart.items.push({ id, name, image, price, cartQuantity: 1 });
     }
-    console.log("current cart items: ", cart)
+
     await cart.save();
     res.status(200).json(cart);
   } catch (err) {
-    console.error("Add cart item error:", err);
     res.status(500).json({ error: "Failed to add cart item" });
   }
 };
@@ -42,6 +39,7 @@ exports.addCartItem = async (req, res) => {
 // Remove item or decrement quantity
 exports.removeCartItem = async (req, res) => {
   const { userId, id } = req.body;
+
   try {
     const cart = await Cart.findOne({ userId });
     if (!cart) return res.status(404).json({ error: "Cart not found" });
@@ -62,9 +60,10 @@ exports.removeCartItem = async (req, res) => {
   }
 };
 
-// Clear specific item
+// Clear specific item from cart
 exports.clearCartItem = async (req, res) => {
   const { userId, id } = req.body;
+
   try {
     const cart = await Cart.findOne({ userId });
     if (!cart) return res.status(404).json({ error: "Cart not found" });
@@ -86,6 +85,7 @@ exports.clearCart = async (req, res) => {
       cart.items = [];
       await cart.save();
     }
+
     res.status(200).json({ message: "Cart cleared" });
   } catch (err) {
     res.status(500).json({ error: "Failed to clear cart" });
