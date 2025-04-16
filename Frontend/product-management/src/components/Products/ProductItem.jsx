@@ -11,7 +11,7 @@ import "./ProductItem.css";
 
 function ProductItem({ id, image, name, price, description, category, stock, outOfStock }) {
 
-  const quantity = useSelector(id ? selectQuantityById(id) : () => 0);
+  const quantity = useSelector(selectQuantityById(id));
 
   const user = useSelector((state) => state.user.currentUser);
   // console.log('Cur User', user);
@@ -35,7 +35,7 @@ function ProductItem({ id, image, name, price, description, category, stock, out
       return;
     }
 
-   
+
     //  setQuantity((prev) => prev + 1)
      const payload = { id, name, price, image, userId };
      dispatch(addCartItem(payload));
@@ -51,7 +51,7 @@ function ProductItem({ id, image, name, price, description, category, stock, out
     dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/create-product");
   };
-  
+
 
 
   // useEffect(() => {

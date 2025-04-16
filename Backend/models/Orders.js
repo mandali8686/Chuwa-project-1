@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const orderSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'User', // Assuming a User collection exists
+        ref: 'User',
         required: true
     },
     items: [
