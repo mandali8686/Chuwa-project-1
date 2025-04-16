@@ -12,6 +12,7 @@ function Products() {
   const dispatch = useDispatch();
   const { list: products, loading, error } = useSelector((state) => state.product);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.currentUser);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
@@ -49,7 +50,7 @@ function Products() {
         
         <div className="products-controls">
         <SortDropdown onSortChange={setSortKey} />
-          <button className="add-btn" onClick={handleAddProduct}>Add Product</button>
+        {(user.role==='admin')&&<button className="add-btn" onClick={handleAddProduct}>Add Product</button>}
         </div>
       </div>
 
