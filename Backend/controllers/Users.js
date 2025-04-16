@@ -18,7 +18,6 @@ const getAllUsers = async (req, res) => {
         }
         res.status(200).json(users);
     } catch (err) {
-        console.error(err.message);
         res.status(400).json({ message: 'Error fetching users' });
     }
 };
@@ -80,7 +79,6 @@ const createUser = async (req, res) => {
         await user.save();
         res.status(201).json({ message: 'User created successfully', user });
     } catch (err) {
-        console.log(err.message);
         res.status(400).json({ message: 'Error creating user' });
     }
 };
@@ -139,7 +137,6 @@ const getUserOrders = async (req, res) => {
         // Return the user's orders
         res.status(200).json(orders);
     } catch (err) {
-        console.error(err.message);
         res.status(500).json({ message: 'Server error' });
     }
 };

@@ -32,7 +32,6 @@ exports.createProduct = async (req, res) => {
       data: savedProduct
     });
   } catch (err) {
-    console.error('Error creating product:', err);
     res.status(500).json({
       success: false,
       message: 'Server error',
@@ -128,7 +127,6 @@ exports.getAllProducts = async (req, res) => {
       data: products
     });
   } catch (err) {
-    console.error('Error fetching products:', err);
     res.status(500).json({
       success: false,
       message: 'Server error',

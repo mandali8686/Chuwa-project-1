@@ -1,10 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createLogger } from 'redux-logger';
 import { userReducer } from '../features/user';
 import { productReducer } from '../features/product/productReducer';
-import {cartReducer} from '../features/cart/index'
-
-const logger = createLogger();
+import { cartReducer } from '../features/cart/index';
 
 const store = configureStore({
   reducer: {
@@ -12,8 +9,6 @@ const store = configureStore({
     product: productReducer,
     cart: cartReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(logger),
   devTools: true,
 });
 

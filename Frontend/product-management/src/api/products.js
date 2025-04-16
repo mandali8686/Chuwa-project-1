@@ -6,7 +6,6 @@ function getURL(endpoint=""){
 
 export async function getAllProducts() {
     const endpoint = getURL();
-    console.log(endpoint);
     return makeHTTPGETRequest(endpoint).then((response)=>{
         return response.data;
     }).catch((error)=>{
@@ -16,7 +15,6 @@ export async function getAllProducts() {
 
 export async function getProduct(productId) {
     const endpoint = getURL(productId);
-    console.log(endpoint);
     return makeHTTPGETRequest(endpoint).then((response)=>{
         return response;
     }).catch((error)=>{
@@ -36,7 +34,6 @@ export async function createProduct() {
 
 export async function updateProduct(productId) {
     const endpoint = getURL(productId);
-    console.log(endpoint);
     return makeHTTPPUTRequest(endpoint).then((response)=>{
         return response;
     }).catch((error)=>{
@@ -53,4 +50,3 @@ export async function deleteProduct(productId) {
         console.error('Delete Product API to HTTP Delete', error);
     })
 }
-

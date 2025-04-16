@@ -6,33 +6,33 @@ import { addCartItem, removeCartItem, selectQuantityById } from '../../features/
 
 
 function ProductDetails() {
+  const userId = useSelector((state) => state.user.currentUser?._id);
   const product = useSelector((state) => state.product.currentProduct);
-  console.log("Product Detial", product);
   const quantity = useSelector(product ? selectQuantityById(product.id) : () => 0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const increment = () => {
-    dispatch(addCartItem({ id: product.id, name, price, image }));
+    dispatch(addCartItem({ id: product.id, name, price, image, userId }));
   };
-  
+
   const decrement = () => {
-    dispatch(removeCartItem({ id: product.id, price }));
+    dispatch(removeCartItem({ id: product.id, price, userId }));
   };
 
   useEffect(() => {
     if (!product) {
-      navigate("/error"); 
+      navigate("/error");
     }
   }, [product, navigate]);
 
-  if (!product) return null; 
+  if (!product) return null;
 
   const { image, name, price, description, category, outOfStock } = product;
 
   return (
     <div className="product-detail-wrapper">
-      
+
       <h1 className="product-detail-title">Product Details</h1>
       <div className="product-detail-container">
         <div className="product-detail-left">
