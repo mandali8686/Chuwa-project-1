@@ -60,19 +60,19 @@ export const clearCartItem = createAsyncThunk("cart/clearItem", async (payload, 
   }
 });
 
-// Clear entire cart
-export const clearCart = createAsyncThunk("cart/clearAll", async (userId, { rejectWithValue }) => {
-  try {
-    const res = await fetch(`http://localhost:5400/api/carts/clear/${userId}`, {
-      method: "POST",
-    });
-    if (!res.ok) throw new Error("Failed to clear cart.");
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return rejectWithValue(err.message);
-  }
-});
+// // Clear entire cart
+// export const clearCart = createAsyncThunk("cart/clearAll", async (userId, { rejectWithValue }) => {
+//   try {
+//     const res = await fetch(`http://localhost:5400/api/carts/clear/${userId}`, {
+//       method: "POST",
+//     });
+//     if (!res.ok) throw new Error("Failed to clear cart.");
+//     const data = await res.json();
+//     return data;
+//   } catch (err) {
+//     return rejectWithValue(err.message);
+//   }
+// });
 
 // Slice
 const cartSlice = createSlice({
@@ -84,7 +84,12 @@ const cartSlice = createSlice({
     count: 0,
     totalPrice: 0,
   },
-  reducers: {},
+  reducers: {
+    clearCart: (state) => {
+    state.CartItems = {};
+    state.totalPrice = 0;
+    state.count = 0;
+  }},
   extraReducers: (builder) => {
     builder
       // fetchCart
@@ -147,13 +152,13 @@ const cartSlice = createSlice({
         state.error = null;
       })
 
-      // clearCart
-      .addCase(clearCart.fulfilled, (state, action) => {
-        state.CartItems = {};
-        state.totalPrice = 0;
-        state.count = 0;
-        state.error = null;
-      })
+      // // clearCart
+      // .addCase(clearCart.fulfilled, (state, action) => {
+      //   state.CartItems = {};
+      //   state.totalPrice = 0;
+      //   state.count = 0;
+      //   state.error = null;
+      // })
 
       // common error handling
       .addMatcher(
@@ -165,5 +170,6 @@ const cartSlice = createSlice({
   }
 });
 
+export const { clearCart } = cartSlice.actions;  
 export const selectQuantityById = (id) => (state) => state.cart.CartItems[id]?.cartQuantity || 0;
 export const cartReducer = cartSlice.reducer;

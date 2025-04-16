@@ -10,7 +10,7 @@ import ShoppingCart from '../Cart/ShoppingCart';
 import { FaCartShopping } from "react-icons/fa6";
 import { message } from "antd";
 import { clearProductState, setCurrentProduct } from '../../features/product/productReducer';
-
+import { clearCart } from '../../features/cart';
 
 const NavBar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -37,12 +37,13 @@ const NavBar = () => {
   };
 
   const closeMobileMenu = () => {
-    
+
     setIsMobileMenuOpen(false);
   };
 
   const handleLogOut = () => {
     dispatch(clearUser());
+    dispatch(clearCart())
     // dispatch(setCurrentProduct(null));
     closeMobileMenu();
     message.success('You have signed out.');
