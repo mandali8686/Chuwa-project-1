@@ -40,7 +40,7 @@ function App() {
   }, [user, dispatch]);
 
   return (
-    isLoaded ? (
+    // isLoaded ? (
       <Routes>
         <Route element={<Layout />}>
           <Route path="/signup" element={<Signup />} />
@@ -48,18 +48,20 @@ function App() {
           <Route path="/error" element={<ErrorPage />} />
           <Route path="/update-password/:token" element={<UpdatePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/" element={<Products />} />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/products" element={<Products />} />
+            {/* <Route path="/products" element={<Products />} /> */}
             <Route path="/product-details" element={<ProductDetails />} />
             <Route path="/create-product" element={<CreateProduct />} />
-            <Route path="/" element={<Products />} />
+            
           </Route>
         </Route>
       </Routes>
-    ) : (
-      <div>Loading...</div>
-    )
+    // ) : (
+    //   <div>Loading...</div>
+    // )
 
   );
 }

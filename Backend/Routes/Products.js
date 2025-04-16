@@ -10,7 +10,7 @@ const {
 const auth = require('../middlewares/auth'); // Uncomment this when ready for auth
 
 
-router.get('/', auth, getAllProducts);
+router.get('/', getAllProducts);
 router.get('/:id', auth, getProduct);
 router.post('/', auth,createProduct);
 router.put('/:id', auth, updateProduct);

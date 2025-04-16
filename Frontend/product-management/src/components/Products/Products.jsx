@@ -13,6 +13,7 @@ function Products() {
   const { list: products, loading, error } = useSelector((state) => state.product);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.currentUser);
+  console.log(products);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
@@ -50,7 +51,7 @@ function Products() {
         
         <div className="products-controls">
         <SortDropdown onSortChange={setSortKey} />
-        {(user.role==='admin')&&<button className="add-btn" onClick={handleAddProduct}>Add Product</button>}
+        {(user && user.role==='admin')&&<button className="add-btn" onClick={handleAddProduct}>Add Product</button>}
         </div>
       </div>
 
