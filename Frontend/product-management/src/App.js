@@ -29,8 +29,8 @@ function App() {
       const parsedUser = JSON.parse(storedUser);
       dispatch(setCurrentUser(parsedUser));
       dispatch(fetchCart(parsedUser._id));
-      setIsLoaded(true);
     }
+    setIsLoaded(true)
   }, [dispatch]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function App() {
   }, [user, dispatch]);
 
   return (
-    // isLoaded ? (
+     isLoaded ? (
       <Routes>
         <Route element={<Layout />}>
           <Route path="/signup" element={<Signup />} />
@@ -55,14 +55,13 @@ function App() {
             {/* <Route path="/products" element={<Products />} /> */}
             <Route path="/product-details" element={<ProductDetails />} />
             <Route path="/create-product" element={<CreateProduct />} />
-            
+
           </Route>
         </Route>
       </Routes>
-    // ) : (
-    //   <div>Loading...</div>
-    // )
-
+    ) : (
+      <div>Loading...</div>
+    )
   );
 }
 
