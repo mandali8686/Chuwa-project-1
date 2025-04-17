@@ -146,7 +146,6 @@ const getUserOrders = async (req, res) => {
 
 const sendResetEmail = async (req, res) => {
     const { email } = req.body;
-  
     try {
       const user = await User.findOne({ email });
       if (!user) return res.status(404).json({ message: 'User not found' });
@@ -171,7 +170,7 @@ const sendResetEmail = async (req, res) => {
         service: 'gmail',
         auth: {
           user: process.env.EMAIL_USER, // e.g., yourname@gmail.com
-          pass: 'aewbkpmcnhwkotui'  // your Gmail App Password or SMTP password
+          pass: process.env.EMAIL_PWD  // your Gmail App Password or SMTP password
         }
       });
   
