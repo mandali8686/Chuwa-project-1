@@ -48,8 +48,6 @@ function Products() {
 
       <div className="products-header">
         <h1>Products</h1>
-
-        
         <div className="products-controls">
         <SortDropdown onSortChange={setSortKey} />
         {(user && user.role==='admin')&&<button className="add-btn" onClick={handleAddProduct}>Add Product</button>}

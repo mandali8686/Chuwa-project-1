@@ -15,6 +15,7 @@ import { useEffect , useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from './features/user';
 import {fetchCart} from './features/cart'
+import EmailSent from './components/auth/EmailSent';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/products" element={<Products />} />
           <Route path="/" element={<Products />} />
+          <Route path='/email-sent' element={<EmailSent />} />
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/products" element={<Products />} /> */}

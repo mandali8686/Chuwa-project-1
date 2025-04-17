@@ -35,7 +35,7 @@ const CardContainer = styled(Card)`
       const result = await dispatch(sendResetEmail(email));
       if (sendResetEmail.fulfilled.match(result)) {
         message.success("Recovery email sent!");
-        navigate('/signin');
+        navigate('/email-sent');
       } else {
         message.error(result.payload || "Failed to send email");
       }
@@ -48,7 +48,7 @@ const CardContainer = styled(Card)`
 
   return (
     <CardContainer>
-    <Card style={{ maxWidth: 400, margin: "0 auto", marginTop: "10%", textAlign:'center' }}>
+    <Card style={{ maxWidth: '100%', margin: "0 auto", marginTop: "10%", textAlign:'center' }}>
       <h2>Update Your Password</h2>
       <p>Enter your email, we will send you the recovery link.</p>
       <Form layout="vertical" onFinish={onFinish}>
