@@ -159,7 +159,7 @@ const cartSlice = createSlice({
         state.totalPrice = total;
         state.count = count;
         state.error = null;
-      }
+      })
 
       // // clearCart
       // .addCase(clearCart.fulfilled, (state, action) => {
@@ -167,22 +167,12 @@ const cartSlice = createSlice({
       //   state.totalPrice = 0;
       //   state.count = 0;
       //   state.error = null;
-      // })
-
-      // common error handling
-
-      .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
-        (state, action) => {
-          state.error = action.payload || action.error.message;
-        }
-      );
+      // }
   }
 });
 
 export const selectQuantityById = (id) => (state) =>
   state.cart.CartItems[id]?.cartQuantity || 0;
 
-export const { clearCart } = cartSlice.actions;  
-export const selectQuantityById = (id) => (state) => state.cart.CartItems[id]?.cartQuantity || 0;
-
+export const { clearCart } = cartSlice.actions;
+export const cartReducer = cartSlice.reducer
