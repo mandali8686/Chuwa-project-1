@@ -14,7 +14,7 @@ import { clearCart } from '../../features/cart';
 
 const NavBar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const {currentUser, isAuthenticated} = useSelector(state => state.user)
+    const {currentUser, isAuthenticated} = useSelector(state => state.user);
     const { totalPrice } = useSelector((state) => state.cart);
     const user = useSelector((state) => state.user.currentUser);
     const navigate =useNavigate();

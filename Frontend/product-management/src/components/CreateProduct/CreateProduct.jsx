@@ -41,7 +41,7 @@ const CreateProduct = () => {
   // };
 
   const handlePreview = () => {
-    const imageUrl = form.getFieldValue("image");
+    const imageUrl = form.getFieldValue("imageUrl");
     if (imageUrl) {
       setPreview(imageUrl);
     } else {
