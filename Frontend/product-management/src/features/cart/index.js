@@ -78,7 +78,7 @@ export const clearCartItem = createAsyncThunk("cart/clearItem", async (payload, 
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    CartItems: {},
+    CartItems: {},      // { [productId]: { ...productInfo, cartQuantity } }
     loading: false,
     error: null,
     count: 0,
@@ -92,65 +92,74 @@ const cartSlice = createSlice({
   }},
   extraReducers: (builder) => {
     builder
-      // fetchCart
       .addCase(fetchCart.fulfilled, (state, action) => {
         const items = action.payload;
         let total = 0, count = 0;
         state.CartItems = {};
         items.forEach(item => {
-          state.CartItems[item.id] = item;
-          total += item.price * item.cartQuantity;
+          const id = item.product._id;
+          state.CartItems[id] = {
+            ...item.product,
+            cartQuantity: item.cartQuantity
+          };
+          total += item.product.price * item.cartQuantity;
           count += item.cartQuantity;
         });
         state.totalPrice = total;
         state.count = count;
         state.error = null;
       })
-
-      // addCartItem
       .addCase(addCartItem.fulfilled, (state, action) => {
         const items = action.payload.items;
         let total = 0, count = 0;
         state.CartItems = {};
         items.forEach(item => {
-          state.CartItems[item.id] = item;
-          total += item.price * item.cartQuantity;
+          const id = item.product._id;
+          state.CartItems[id] = {
+            ...item.product,
+            cartQuantity: item.cartQuantity
+          };
+          total += item.product.price * item.cartQuantity;
           count += item.cartQuantity;
         });
         state.totalPrice = total;
         state.count = count;
         state.error = null;
       })
-
-      // removeCartItem
       .addCase(removeCartItem.fulfilled, (state, action) => {
         const items = action.payload.items;
         let total = 0, count = 0;
         state.CartItems = {};
         items.forEach(item => {
-          state.CartItems[item.id] = item;
-          total += item.price * item.cartQuantity;
+          const id = item.product._id;
+          state.CartItems[id] = {
+            ...item.product,
+            cartQuantity: item.cartQuantity
+          };
+          total += item.product.price * item.cartQuantity;
           count += item.cartQuantity;
         });
         state.totalPrice = total;
         state.count = count;
         state.error = null;
       })
-
-      // clearCartItem
       .addCase(clearCartItem.fulfilled, (state, action) => {
         const items = action.payload.items;
         let total = 0, count = 0;
         state.CartItems = {};
         items.forEach(item => {
-          state.CartItems[item.id] = item;
-          total += item.price * item.cartQuantity;
+          const id = item.product._id;
+          state.CartItems[id] = {
+            ...item.product,
+            cartQuantity: item.cartQuantity
+          };
+          total += item.product.price * item.cartQuantity;
           count += item.cartQuantity;
         });
         state.totalPrice = total;
         state.count = count;
         state.error = null;
-      })
+      }
 
       // // clearCart
       // .addCase(clearCart.fulfilled, (state, action) => {
@@ -161,6 +170,7 @@ const cartSlice = createSlice({
       // })
 
       // common error handling
+
       .addMatcher(
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
@@ -170,6 +180,9 @@ const cartSlice = createSlice({
   }
 });
 
+export const selectQuantityById = (id) => (state) =>
+  state.cart.CartItems[id]?.cartQuantity || 0;
+
 export const { clearCart } = cartSlice.actions;  
 export const selectQuantityById = (id) => (state) => state.cart.CartItems[id]?.cartQuantity || 0;
-export const cartReducer = cartSlice.reducer;
+
