@@ -1,101 +1,140 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { Button, message } from "antd";
+import styled from "@emotion/styled";
 import { addCartItem, removeCartItem, selectQuantityById } from '../../features/cart';
-
 import { setCurrentProduct } from "../../features/product/productReducer";
-import "./ProductItem.css";
-import { message } from "antd";
+import { QuantityBox, QtyButton, Quantity } from "../common/QuantityControl";
+
+const ProductCard = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 10px auto;
+  background: white;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor:pointer;
+`;
+
+const ProductImage = styled.img`
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+`;
+
+const InfoSection = styled.div`
+  text-align: center;
+  margin-top: 12px;
+`;
+
+const Name = styled.strong`
+  font-size: 16px;
+  display: block;
+  margin-bottom: 4px;
+`;
+
+const Price = styled.p`
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 8px;
+`;
+
+const Controls = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+`;
+
+// const QuantityBox = styled.div`
+//   display: flex;
+//   align-items: center;
+//   background: #f3f3f3;
+//   border-radius: 6px;
+//   padding: 4px 8px;
+// `;
+
+// const QtyButton = styled(Button)`
+//   background-color: #6200ee;
+//   color: white;
+//   border: none;
+// `;
+
+const EditBtn = styled(Button)`
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 6px;
+`;
 
 function ProductItem({ id, image, name, price, description, category, stock, outOfStock }) {
-
   const quantity = useSelector(selectQuantityById(id));
-
   const user = useSelector((state) => state.user.currentUser);
-  // console.log('Cur User', user);
-
-  const userId = useSelector((state) => state.user.currentUser?._id);
-
-
+  const userId = user?._id;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    if(!user){
-      message.error('Please Sign In to View Product Details.')
+    if (!user) {
+      message.error('Please Sign In to View Product Details.');
+      return;
     }
     dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/product-details");
   };
 
   const increment = () => {
-    if(!user){
-      message.error('Please Sign In to Add Product to Cart.')
+    if (!user) {
+      message.error('Please Sign In to Add Product to Cart.');
       navigate("/signin");
       return;
     }
-
     if (outOfStock) {
       navigate("/error");
       return;
     }
-    //  setQuantity((prev) => prev + 1)
-     const payload = { id, name, price, image, userId };
-     dispatch(addCartItem(payload));
-    }
+    dispatch(addCartItem({ id, name, price, image, userId }));
+  };
 
-  const decrement = () =>{
-    // setQuantity((prev) => Math.max(0, prev - 1));
-    if(!user){
-      message.error('Please Sign In to Add Product to Cart.')
+  const decrement = () => {
+    if (!user) {
+      message.error('Please Sign In to Add Product to Cart.');
       navigate("/signin");
       return;
     }
-    const payload = { id, name, price, image, userId };
-     dispatch(removeCartItem(payload));
-  }
+    dispatch(removeCartItem({ id, name, price, image, userId }));
+  };
 
   const handleEditClick = () => {
     dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/create-product");
   };
 
-
-
-  // useEffect(() => {
-  //   if (itemInCart) {
-  //     setQuantity(itemInCart.cartQuantity);
-  //   } else {
-  //     setQuantity(0);
-  //   }
-  // }, [itemInCart]);
-
   return (
-    <div className="product-item-container" onClick={handleClick}>
-      <img className="product-image" src={image} alt={name} />
-      <div className="product-info">
-        <strong className="product-name">{name}</strong>
-        <p className="product-price">
-          ${typeof price === "number" ? price.toFixed(2) : "N/A"}
-        </p>
-        <div className="product-controls" onClick={(e) => e.stopPropagation()}>
-          <div className="quantity-box">
-            <button className="qty-btn" onClick={decrement}>
-              −
-            </button>
-            <span className="quantity">{quantity}</span>
-            <button className="qty-btn" onClick={increment}>
-              +
-            </button>
-          </div>
-          {(user && user.role==='admin')&&<button className="edit-btn" onClick={handleEditClick}>Edit</button>}
-        </div>
-      </div>
-    </div>
+    <ProductCard onClick={handleClick}>
+      <ProductImage src={image} alt={name} />
+      <InfoSection>
+        <Name>{name}</Name>
+        <Price>${typeof price === "number" ? price.toFixed(2) : "N/A"}</Price>
+        <Controls onClick={(e) => e.stopPropagation()}>
+          <QuantityBox>
+            <QtyButton size="small" onClick={decrement}>−</QtyButton>
+            <span style={{ margin: "0 10px", fontWeight: 600 }}>{quantity}</span>
+            <QtyButton size="small" onClick={increment}>+</QtyButton>
+          </QuantityBox>
+          {user?.role === 'admin' && (
+            <EditBtn size="small" onClick={handleEditClick}>Edit</EditBtn>
+          )}
+        </Controls>
+      </InfoSection>
+    </ProductCard>
   );
 }
 

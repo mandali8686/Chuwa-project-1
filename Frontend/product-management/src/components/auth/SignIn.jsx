@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Typography, Card, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, clearError } from '../../features/user/index'
+import { CardContainer } from '../common/QuantityControl';
 
 import styled from '@emotion/styled';
 
@@ -27,15 +28,7 @@ width: 300px;
 }
 `;
 
-const CardContainer = styled(Card)`
-  height: 100vh;
-  background: rgba(190, 185, 185, 0.25);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  box-shadow: none;
-`;
+
 
 const ResponsiveFooter = styled.div `
   width: 100%;

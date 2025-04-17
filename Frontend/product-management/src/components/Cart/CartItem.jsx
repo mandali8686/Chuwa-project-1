@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { productReducer, setCurrentProduct } from "../../features/product/productReducer";
 import { addCartItem, removeCartItem, selectQuantityById, clearCartItem} from '../../features/cart'
+import { QuantityBox, QtyButton, Quantity } from "../common/QuantityControl"; 
 import styled from '@emotion/styled';
 
 const ProductItemContainer = styled.div`
@@ -24,7 +25,7 @@ const ProductInfo = styled.div`
   justify-content: space-between;
   margin-left: 10px;
   height: 100%;
-  width: 70%;
+  width: 60%;
 `;
 
 const ProductControls = styled.div`
@@ -34,10 +35,10 @@ const ProductControls = styled.div`
   margin-top: 10px;
 `;
 
-const QuantityBox = styled.div`
-  display: flex;
-  align-items: center;
-`;
+// const QuantityBox = styled.div`
+//   display: flex;
+//   align-items: center;
+// `;
 
 const EditButton = styled.button`
   color: black;
@@ -49,7 +50,7 @@ const EditButton = styled.button`
   background: none;
 `;
 
-function CartItem({ id, image, name, price, description, cartQuantity, category, outOfStock }) {
+function CartItem({ id, image, name, price, description, cartQuantity, category, stock, outOfStock }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.currentUser?._id);
@@ -58,7 +59,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
 
 
   const handleClick = () => {
-    dispatch(setCurrentProduct({ image, name, price, description, category, cartQuantity }));
+    dispatch(setCurrentProduct({ id, image, name, price, description, category, stock, outOfStock }));
     navigate("/product-details");
   };
 
@@ -74,7 +75,7 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
 
   return (
     <ProductItemContainer onClick={handleClick}>
-        <img  src={image} alt={name} style={{width:"100%",height: "100%", objectFit: "cover"}}/>
+        <img  src={image} alt={name} style={{width:"50%",height: "auto", objectFit: "cover"}}/>
       <ProductInfo>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <strong className="product-name">{name}</strong>
@@ -83,10 +84,10 @@ function CartItem({ id, image, name, price, description, cartQuantity, category,
         {error && <div className="error-message">{error}</div>}
         <ProductControls onClick={(e) => e.stopPropagation()}>
           <QuantityBox>
-            <button className="qty-btn" onClick={decrement}>−</button>
-            <span className="quantity">{cartQuantity}</span>
-            <button className="qty-btn" onClick={increment}>+</button>
-          </QuantityBox>
+                  <QtyButton onClick={decrement}>−</QtyButton>
+                  <Quantity>{cartQuantity}</Quantity>
+                  <QtyButton onClick={increment}>+</QtyButton>
+              </QuantityBox>
           <EditButton onClick={() => dispatch(clearCartItem({userId, id}))}>Remove</EditButton>
         </ProductControls>
       </ProductInfo>
