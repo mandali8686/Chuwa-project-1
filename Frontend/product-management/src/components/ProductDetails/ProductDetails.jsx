@@ -148,6 +148,7 @@ function ProductDetails() {
     const quantity = useSelector(selectQuantityById(product?.id));
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.currentUser);
 
     useEffect(() => {
       if (!product) navigate("/error");
@@ -191,7 +192,10 @@ function ProductDetails() {
                   <Quantity>{quantity}</Quantity>
                   <QtyButton onClick={increment}>+</QtyButton>
                 </QuantityBox>
-                <EditButton onClick={handleEditClick}>Edit</EditButton>
+                {user?.role === 'admin' && (
+            <EditButton onClick={handleEditClick}>Edit</EditButton>
+          )}
+                
               </Buttons>
             </Right>
           </Container>
