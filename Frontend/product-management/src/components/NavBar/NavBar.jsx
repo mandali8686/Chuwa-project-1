@@ -70,9 +70,7 @@ const NavBar = () => {
             <NavLink
               to="/SignIn"
               className={({ isActive }) =>
-
                 `nav-links ${isActive ? 'active' : ''}`
-
               }
               onClick={closeMobileMenu}
             >
